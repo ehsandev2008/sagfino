@@ -1,0 +1,43 @@
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  cacheComponents: true,
+  partialPrefetching: true,
+  images: {
+    formats: ["image/avif", "image/webp"],
+    deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
+    imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
+  },
+  experimental: {
+    optimizePackageImports: ["iconsax-react", "motion"],
+  },
+  compiler: {
+    removeConsole: process.env.NODE_ENV === "production",
+  },
+  turbopack: {
+    rules: {
+      "*.css": {
+        loaders: ["@tailwindcss/turbopack"],
+        as: "*.css",
+      },
+      // Ignore mongodb native module during build
+      "mongodb/**/*.node": {
+        loaders: ["ignore-loader"],
+        as: "*.js",
+      },
+    },
+    resolveAlias: {
+      mongodb: false,
+    },
+  },
+  webpack: (config, { isServer }) => {
+    if (isServer) {
+      config.externals = [
+        ...(config.externals || []),
+        "mongodb",
+      ];
+    }
+    return config;
+  },
+};
+
+export default nextConfig;
