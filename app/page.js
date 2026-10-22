@@ -7,6 +7,7 @@ import HeroSection from "../components/home/HeroSection";
 import PropertyTypes from "../components/home/PropertyTypes";
 import HeroProSection from "../components/home-pro/HeroProSection";
 import RentListings from "../components/home-pro/RentListings";
+import TopAgenciesSection from "../components/home-pro/top-agencies";
 import ServicesSection from "../components/home-pro/ServicesSection";
 import SuggestedSearches from "../components/home-pro/SuggestedSearches";
 import { useAuth } from "../context/AuthContext";
@@ -19,6 +20,7 @@ export default function Home() {
       <>
         <HeroProSection />
         <RentListings />
+        <TopAgenciesSection />
         <ServicesSection />
         <SuggestedSearches />
       </>
