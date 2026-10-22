@@ -74,14 +74,14 @@ const ITEMS = [
     image: "/imags/rent images/unsplash_hCU4fimRW-c.webp",
     time: "۲ ساعت پیش",
     title: "رهن و اجاره آپارتمان تهران",
-    address: "۸۰ متر، پاسداران، مکران جنوبی",
+    address: "۸۰ متر، محدوده پاسدارن، مکران جنوبی",
     deposit: "۴۰۰ میلیون تومان رهن",
     rent: "۱۵ میلیون تومان اجاره",
     href: "/properties/8",
   },
 ];
 
-/** جدیدترین خانه‌های اجاره‌ای تهران — صفحه Home Pro User */
+/** جدیدترین خانه‌های اجاره‌ای تهران — صفحه Home Pro User (مطابق با کامپوننت فیگما) */
 export default function RentListings() {
   const [saved, setSaved] = useState({});
 
@@ -105,9 +105,9 @@ export default function RentListings() {
         <div className="mt-6 grid grid-cols-2 gap-3 lg:mt-8 lg:grid-cols-4 lg:gap-6">
           {ITEMS.map((item, i) => (
             <Reveal key={item.href} variant={["wipe", "focus", "drift", "rise"][i % 4]} delay={(i % 4) * 0.06}>
-              <article className="group flex h-full flex-col overflow-hidden rounded-2xl border border-gray-4 bg-white shadow-sm transition-shadow hover:shadow-md">
-                {/* ── Image ── */}
-                <div className="relative aspect-[4/3] overflow-hidden">
+              <article className="group flex h-full flex-col overflow-hidden rounded-2xl border border-gray-4 bg-white transition-all duration-300 hover:border-gray-6 hover:shadow-md">
+                {/* ── عکس ملک ── */}
+                <div className="relative aspect-[288/169] w-full overflow-hidden">
                   <Image
                     src={item.image}
                     alt={item.title}
@@ -115,47 +115,49 @@ export default function RentListings() {
                     sizes="(max-width: 1024px) 50vw, 25vw"
                     className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
                   />
-                  {/* Time badge */}
-                  <span className="absolute right-3 top-3 rounded-lg bg-gray-12/60 px-3 py-1.5 text-caption-md font-medium text-white backdrop-blur-sm lg:right-4 lg:top-4">
+                  {/* بج زمان (بالا سمت چپ مطابق فیگما) */}
+                  <span className="absolute left-3 top-3 flex items-center justify-center rounded-[4px] bg-black/40 px-2 py-1 text-caption-md text-white backdrop-blur-sm lg:text-body-xs">
                     {item.time}
                   </span>
                 </div>
 
-                {/* ── Info ── */}
-                <div className="flex flex-1 flex-col gap-2 p-3 lg:gap-3 lg:p-4">
-                  {/* Title row with bookmark */}
-                  <div className="flex items-start justify-between gap-2">
-                    <h3 className="text-body-xxs font-bold leading-relaxed text-black lg:text-body-xs">
-                      {item.title}
-                    </h3>
-                    <button
-                      type="button"
-                      aria-label={saved[item.href] ? "حذف از نشان‌شده‌ها" : "افزودن به نشان‌شده‌ها"}
-                      onClick={() => setSaved((v) => ({ ...v, [item.href]: !v[item.href] }))}
-                      className="shrink-0 text-gray-7 transition-colors hover:text-primary"
-                    >
-                      <Bookmark
-                        size="22"
-                        color="currentColor"
-                        variant={saved[item.href] ? "Bold" : "Linear"}
-                      />
-                    </button>
+                {/* ── اطلاعات کارت (Card Info) ── */}
+                <div className="flex flex-1 flex-col pt-2.5 px-3.5 pb-5 lg:pb-6">
+                  <div className="flex flex-1 flex-col gap-1">
+                    {/* ردیف عنوان و بوکمارک */}
+                    <div className="flex items-center justify-between gap-2">
+                      <h3 className="truncate text-body-xxs font-normal text-gray-8 lg:text-body-xs">
+                        {item.title}
+                      </h3>
+                      <button
+                        type="button"
+                        aria-label={saved[item.href] ? "حذف از نشان‌شده‌ها" : "افزودن به نشان‌شده‌ها"}
+                        onClick={() => setSaved((v) => ({ ...v, [item.href]: !v[item.href] }))}
+                        className="shrink-0 text-gray-8 transition-colors hover:text-primary"
+                      >
+                        <Bookmark
+                          size="24"
+                          color="currentColor"
+                          variant={saved[item.href] ? "Bold" : "Linear"}
+                        />
+                      </button>
+                    </div>
+
+                    {/* متراژ و آدرس */}
+                    <p className="truncate text-body-xxs font-normal text-gray-10 lg:text-body-xs">
+                      {item.address}
+                    </p>
+
+                    {/* مقدار رهن */}
+                    <p className="text-body-xxs font-bold text-gray-11 lg:text-body-xs">
+                      {item.deposit}
+                    </p>
+
+                    {/* مقدار اجاره */}
+                    <p className="text-body-xxs font-bold text-gray-11 lg:text-body-xs">
+                      {item.rent}
+                    </p>
                   </div>
-
-                  {/* Address */}
-                  <p className="truncate text-caption-md text-gray-8 lg:text-body-xxs">
-                    {item.address}
-                  </p>
-
-                  {/* Deposit */}
-                  <p className="text-body-xxs font-bold text-black lg:text-body-xs">
-                    {item.deposit}
-                  </p>
-
-                  {/* Rent */}
-                  <p className="text-body-xxs font-bold text-black lg:text-body-xs">
-                    {item.rent}
-                  </p>
                 </div>
               </article>
             </Reveal>
