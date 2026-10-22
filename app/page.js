@@ -8,6 +8,7 @@ import PropertyTypes from "../components/home/PropertyTypes";
 import HeroProSection from "../components/home-pro/HeroProSection";
 import RentListings from "../components/home-pro/RentListings";
 import ServicesSection from "../components/home-pro/ServicesSection";
+import SuggestedSearches from "../components/home-pro/SuggestedSearches";
 import { useAuth } from "../context/AuthContext";
 
 export default function Home() {
@@ -19,6 +20,7 @@ export default function Home() {
         <HeroProSection />
         <RentListings />
         <ServicesSection />
+        <SuggestedSearches />
       </>
     );
   }
