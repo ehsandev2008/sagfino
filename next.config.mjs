@@ -19,24 +19,7 @@ const nextConfig = {
         loaders: ["@tailwindcss/turbopack"],
         as: "*.css",
       },
-      // Ignore mongodb native module during build
-      "mongodb/**/*.node": {
-        loaders: ["ignore-loader"],
-        as: "*.js",
-      },
     },
-    resolveAlias: {
-      mongodb: false,
-    },
-  },
-  webpack: (config, { isServer }) => {
-    if (isServer) {
-      config.externals = [
-        ...(config.externals || []),
-        "mongodb",
-      ];
-    }
-    return config;
   },
 };
 

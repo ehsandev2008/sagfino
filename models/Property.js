@@ -1,5 +1,5 @@
 import { getCollection, getDatabase } from "@/lib/mongodb";
-import { ObjectId } from "mongodb";
+import { ObjectId } from "@/lib/mongodb";
 
 const COLLECTION = "properties";
 
