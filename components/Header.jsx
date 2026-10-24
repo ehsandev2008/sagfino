@@ -174,8 +174,11 @@ export default function Header() {
                   <span className="flex h-11 w-11 items-center justify-center rounded-full bg-primary text-white">
                     <Profile size="22" color="currentColor" variant="Bold" />
                   </span>
-                  <div className="min-w-0">
-                    <p className="truncate text-body-xs font-bold text-black">
+                  <div className="min-w-0 text-right">
+                    <p
+                      dir="ltr"
+                      className="truncate text-right text-body-xs font-bold text-black"
+                    >
                       {user?.phone ? user.phone.replace(/^0/, "+98 ") : "پروفایل"}
                     </p>
                     <p className="text-caption-md text-gray-9">کاربر سقفینو</p>
