@@ -1,9 +1,10 @@
 "use client";
 
-import { useRef, useState, useEffect } from "react";
-import { ArrowLeft2, ArrowRight2 } from "iconsax-react";
+import { useCallback, useRef, useState, useEffect } from "react";
+import { ArrowLeft2 } from "iconsax-react";
 import Reveal from "../../ui/Reveal";
 import AgencyCard from "./AgencyCard";
+import AgencyModal from "./AgencyModal";
 
 const AGENCIES = [
   {
@@ -14,8 +15,8 @@ const AGENCIES = [
     satisfaction: "۴/۹ از ۵",
     activeAds: "بیش از ۴۰۰۰",
     reviewsCount: "۱۲",
-    logo: "/imags/amlak/agency-1.webp",
-    href: "/agencies/toosi",
+    logo: "/imags/amlak/agency-4.webp",
+    phones: ["09123456789", "02112345678"],
   },
   {
     id: 2,
@@ -26,7 +27,7 @@ const AGENCIES = [
     activeAds: "بیش از ۳۵۰۰",
     reviewsCount: "۱۲",
     logo: "/imags/amlak/agency-2.webp",
-    href: "/agencies/valiasr",
+    phones: ["09127654321", "02188776655"],
   },
   {
     id: 3,
@@ -37,7 +38,7 @@ const AGENCIES = [
     activeAds: "بیش از ۲۰۰۰",
     reviewsCount: "۱۲",
     logo: "/imags/amlak/agency-3.webp",
-    href: "/agencies/fereshteh",
+    phones: ["09121234567", "02122334455"],
   },
   {
     id: 4,
@@ -47,8 +48,8 @@ const AGENCIES = [
     satisfaction: "۴ از ۵",
     activeAds: "بیش از ۲۰۰۰",
     reviewsCount: "۱۲",
-    logo: "/imags/amlak/agency-4.webp",
-    href: "/agencies/sabz",
+    logo: "/imags/amlak/agency-1.webp",
+    phones: ["09129876543", "02177889900"],
   },
 ];
 
@@ -60,6 +61,15 @@ const AGENCIES = [
 export default function TopAgenciesSection() {
   const trackRef = useRef(null);
   const [canScrollLeft, setCanScrollLeft] = useState(true);
+  const [activeAgency, setActiveAgency] = useState(null);
+
+  const openAgency = useCallback((agency, rect, trigger) => {
+    setActiveAgency({ agency, rect, trigger });
+  }, []);
+
+  const closeAgency = useCallback(() => {
+    setActiveAgency(null);
+  }, []);
 
   const scrollNext = () => {
     if (trackRef.current) {
@@ -104,7 +114,7 @@ export default function TopAgenciesSection() {
                 variant={["wipe", "focus", "drift", "rise"][index % 4]}
                 delay={index * 0.08}
               >
-                <AgencyCard agency={agency} />
+                <AgencyCard agency={agency} onOpen={openAgency} />
               </Reveal>
             ))}
           </div>
@@ -131,7 +141,7 @@ export default function TopAgenciesSection() {
                 key={agency.id}
                 className="w-[72%] shrink-0 snap-center sm:w-[48%]"
               >
-                <AgencyCard agency={agency} />
+                <AgencyCard agency={agency} onOpen={openAgency} />
               </div>
             ))}
           </div>
@@ -149,6 +159,16 @@ export default function TopAgenciesSection() {
           )}
         </div>
       </div>
+
+      {/* پاپ‌آپ اطلاعات آژانس */}
+      {activeAgency && (
+        <AgencyModal
+          agency={activeAgency.agency}
+          originRect={activeAgency.rect}
+          returnFocusTo={activeAgency.trigger}
+          onClose={closeAgency}
+        />
+      )}
     </section>
   );
 }
