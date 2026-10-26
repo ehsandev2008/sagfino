@@ -1,6 +1,5 @@
 import { Suspense } from "react";
 import { connection } from "next/server";
-import RentHero from "@/components/listings/RentHero";
 import RentPageSkeleton from "@/components/listings/RentPageSkeleton";
 import FilterBar from "@/components/listings/FilterBar";
 import ResultsToolbar from "@/components/listings/ResultsToolbar";
@@ -29,7 +28,6 @@ const IRAN_CENTER = { lat: 32.4279, lng: 53.688, zoom: 5 };
 export default function RentPage({ searchParams }) {
   return (
     <div className="pb-24 lg:pb-14">
-      <RentHero />
       <section className="mx-auto mt-3 w-[calc(100%-1.5rem)] max-w-[1224px] lg:mt-5 lg:w-[80%]">
         <Suspense fallback={<RentPageSkeleton />}>
           <RentResults searchParams={searchParams} />
