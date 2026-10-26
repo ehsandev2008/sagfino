@@ -4,24 +4,19 @@ import { connection } from "next/server";
 import { notFound } from "next/navigation";
 import {
   ArrowLeft2,
-  Clock,
   DocumentText,
-  Eye,
-  Home2,
-  Location,
   Map1,
   TickCircle,
   Warning2,
 } from "iconsax-react";
 import PropertyGallery from "@/components/properties/PropertyGallery";
+import PropertySummary from "@/components/properties/PropertySummary";
 import PropertySpecs from "@/components/properties/PropertySpecs";
 import PropertyContact from "@/components/properties/PropertyContact";
 import ListingCard from "@/components/listings/ListingCard";
 import MapPanel from "@/components/listings/map/MapPanel";
 import { getListingByCode, getRentListings } from "@/lib/listings/service";
 import { parseListingSearchParams } from "@/lib/listings/query";
-import { formatDateFa, formatRelativeTime } from "@/lib/listings/format";
-import { toFaDigits } from "@/lib/auth";
 
 export const metadata = {
   title: "جزئیات آگهی | سقفینو",
@@ -32,29 +27,6 @@ export const metadata = {
 export default function PropertyPage({ params }) {
   return (
     <div className="pb-16">
-      <div className="border-b border-gray-3 bg-gray-1/70">
-        <div className="mx-auto w-[calc(100%-1.5rem)] max-w-[1224px] py-3 lg:w-[80%]">
-          <nav
-            aria-label="مسیر صفحه"
-            className="flex flex-wrap items-center gap-1.5 text-[11px] text-gray-7"
-          >
-            <Link
-              href="/"
-              className="flex items-center gap-1 transition-colors hover:text-primary"
-            >
-              <Home2 size="13" color="currentColor" />
-              خانه
-            </Link>
-            <ArrowLeft2 size="11" color="currentColor" className="text-gray-5" />
-            <Link href="/rent" className="transition-colors hover:text-primary">
-              اجارهٔ مسکن
-            </Link>
-            <ArrowLeft2 size="11" color="currentColor" className="text-gray-5" />
-            <span className="text-gray-10">جزئیات آگهی</span>
-          </nav>
-        </div>
-      </div>
-
       <Suspense fallback={<PropertySkeleton />}>
         <PropertyContent params={params} />
       </Suspense>
@@ -114,71 +86,17 @@ async function PropertyContent({ params }) {
 
   return (
     <div className="mx-auto w-[calc(100%-1.5rem)] max-w-[1224px] py-4 lg:w-[80%] lg:py-6">
-      <div className="flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between">
-        <div className="min-w-0">
-          <div className="flex flex-wrap items-center gap-1.5">
-            <span className="rounded-md bg-primary-tint-1 px-2 py-1 text-[10px] font-medium text-primary">
-              {property.propertyTypeLabel}
-            </span>
-            <span className="rounded-md bg-gray-1 px-2 py-1 text-[10px] text-gray-9">
-              رهن و اجاره
-            </span>
-            {property.isVerified && (
-              <span className="flex items-center gap-1 rounded-md bg-success-light-2 px-2 py-1 text-[10px] text-success">
-                <TickCircle size="12" variant="Bold" color="currentColor" />
-                تاییدشده
-              </span>
-            )}
-            {property.isFeatured && (
-              <span className="rounded-md bg-warning-light-2 px-2 py-1 text-[10px] text-warning">
-                آگهی ویژه
-              </span>
-            )}
-          </div>
-
-          <h1 className="mt-2.5 text-h6 leading-[1.6] text-gray-13 sm:text-h5 lg:text-h4">
-            {property.title}
-          </h1>
-
-          <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-[11px] text-gray-8">
-            <span className="flex items-center gap-1">
-              <Location
-                size="14"
-                variant="Bold"
-                color="currentColor"
-                className="text-primary"
-              />
-              {property.address}
-            </span>
-            <span className="flex items-center gap-1">
-              <Clock size="13" color="currentColor" />
-              {formatRelativeTime(property.createdAt)}
-            </span>
-            <span className="flex items-center gap-1">
-              <Eye size="13" color="currentColor" />
-              {toFaDigits(property.viewsCount ?? 0)} بازدید
-            </span>
-          </div>
-        </div>
-
-        <div className="flex shrink-0 flex-wrap items-center gap-1.5 text-[10px]">
-          <span className="rounded-lg border border-gray-4 bg-white px-2.5 py-1.5 text-gray-8">
-            کد آگهی: <span className="font-semibold text-gray-11" dir="ltr">{property.code}</span>
-          </span>
-          <span className="rounded-lg border border-gray-4 bg-white px-2.5 py-1.5 text-gray-8">
-            انتشار: {formatDateFa(property.createdAt)}
-          </span>
-        </div>
-      </div>
+      <PropertyGallery
+        key={property.code}
+        images={property.images}
+        title={property.title}
+        isVerified={property.isVerified}
+        isFeatured={property.isFeatured}
+      />
 
       <div className="mt-4 grid grid-cols-1 gap-4 lg:grid-cols-12 lg:items-start">
         <div className="space-y-4 lg:col-span-8">
-          <PropertyGallery
-            images={property.images}
-            title={property.title}
-            isVerified={property.isVerified}
-            isFeatured={property.isFeatured}
-          />
+          <PropertySummary property={property} />
 
           <PropertySpecs property={property} />
 
@@ -323,14 +241,12 @@ function PropertySkeleton() {
       aria-busy="true"
       aria-label="در حال بارگذاری آگهی"
     >
-      <div className="listings-shimmer h-4 w-32 rounded-full" />
-      <div className="listings-shimmer mt-3 h-8 w-3/4 max-w-xl rounded-xl" />
-      <div className="listings-shimmer mt-2 h-3.5 w-1/2 rounded-md" />
+      <div className="listings-shimmer h-[clamp(240px,36vw,500px)] w-full rounded-2xl" />
 
       <div className="mt-4 grid grid-cols-1 gap-4 lg:grid-cols-12">
         <div className="space-y-4 lg:col-span-8">
-          <div className="listings-shimmer aspect-[16/10] w-full rounded-2xl" />
-          <div className="listings-shimmer h-44 w-full rounded-2xl" />
+          <div className="listings-shimmer h-32 w-full rounded-2xl" />
+          <div className="listings-shimmer h-80 w-full rounded-2xl" />
           <div className="listings-shimmer h-36 w-full rounded-2xl" />
         </div>
         <div className="space-y-3 lg:col-span-4">
