@@ -6,7 +6,7 @@ import { CloseCircle, Map1 } from "iconsax-react";
 import { toFaDigits } from "@/lib/auth";
 import MapPanel from "./map/MapPanel";
 
-export default function MobileMap({ points, center, cityName, total }) {
+export default function MobileMap({ points, center, cityName, total, iranOnly = false }) {
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
@@ -72,6 +72,7 @@ export default function MobileMap({ points, center, cityName, total }) {
                 center={center}
                 cityName={cityName}
                 total={total}
+                iranOnly={iranOnly}
               />
             </div>
           </motion.div>

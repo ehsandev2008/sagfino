@@ -19,11 +19,17 @@ const LeafletMap = dynamic(() => import("./LeafletMap"), {
   ),
 });
 
-export default function MapPanel({ points = [], center, cityName, total = 0 }) {
+export default function MapPanel({
+  points = [],
+  center,
+  cityName,
+  total = 0,
+  iranOnly = false,
+}) {
   return (
     <div className="relative h-full w-full overflow-hidden rounded-2xl border border-gray-4 bg-gray-2 shadow-[0_6px_30px_rgba(12,12,12,0.04)]">
       <div className="absolute inset-0 z-0">
-        <LeafletMap points={points} center={center} />
+        <LeafletMap points={points} center={center} iranOnly={iranOnly} />
       </div>
 
       <div className="pointer-events-none absolute inset-x-3 top-3 z-10 flex items-start justify-between gap-2">

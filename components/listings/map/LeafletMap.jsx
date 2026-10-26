@@ -4,6 +4,7 @@ import { useEffect, useMemo } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import {
+  GeoJSON,
   MapContainer,
   Marker,
   Popup,
@@ -13,10 +14,33 @@ import {
 } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
+import iranGeo from "@/lib/data/iran.geo.json";
 import { formatPriceShort } from "@/lib/listings/format";
 import { toFaDigits } from "@/lib/auth";
 
 const IRAN_CENTER = [32.4279, 53.688];
+const IRAN_BOUNDS = [
+  [24.5, 43.5],
+  [40.2, 63.6],
+];
+
+// مرزهای ایران به‌صورت یک حفره در یک چندضلعی بزرگ‌تر قرار می‌گیرد تا
+// فقط خاک ایران روی نقشه دیده شود و کشورهای همسایه پوشانده شوند.
+const MASK_OUTER_RING = [
+  [-80, -60],
+  [140, -60],
+  [140, 80],
+  [-80, 80],
+  [-80, -60],
+];
+const IRAN_MASK = {
+  type: "Feature",
+  properties: {},
+  geometry: {
+    type: "Polygon",
+    coordinates: [MASK_OUTER_RING, iranGeo.features[0].geometry.coordinates[0]],
+  },
+};
 
 function createPriceIcon(point) {
   const label = formatPriceShort(point.rent);
@@ -31,7 +55,7 @@ function createPriceIcon(point) {
   });
 }
 
-function MapController({ center, points }) {
+function MapController({ center, points, iranOnly = false }) {
   const map = useMap();
 
   useEffect(() => {
@@ -44,11 +68,21 @@ function MapController({ center, points }) {
       Number.isFinite(center?.zoom);
 
     // نقشهٔ دسکتاپ در موبایل با CSS پنهان می‌شود و ابعاد صفر دارد؛
-    // در این حالت Leaflet نمی‌تواند flyTo را محاسبه کند.
+    // در این حالت Leaflet نمی‌تواند مختصات را محاسبه کند.
     const apply = () => {
-      if (!hasCenter) return;
       const size = map.getSize();
       if (!size.x || !size.y) return;
+
+      if (iranOnly) {
+        map.fitBounds(IRAN_BOUNDS, {
+          padding: [18, 18],
+          animate: false,
+          maxZoom: 6,
+        });
+        return;
+      }
+
+      if (!hasCenter) return;
 
       if (reduced) {
         map.setView([center.lat, center.lng], center.zoom, { animate: false });
@@ -78,7 +112,7 @@ function MapController({ center, points }) {
       window.clearTimeout(resizeTimer);
       window.removeEventListener("resize", handleResize);
     };
-  }, [map, center?.lat, center?.lng, center?.zoom]);
+  }, [map, center?.lat, center?.lng, center?.zoom, iranOnly]);
 
   useEffect(() => {
     const timer = window.setTimeout(() => map.invalidateSize(), 350);
@@ -88,7 +122,7 @@ function MapController({ center, points }) {
   return null;
 }
 
-export default function LeafletMap({ points, center, cityName }) {
+export default function LeafletMap({ points, center, iranOnly = false }) {
   const markers = useMemo(
     () =>
       points
@@ -103,9 +137,13 @@ export default function LeafletMap({ points, center, cityName }) {
       zoom={5}
       minZoom={4}
       maxZoom={18}
+      maxBounds={IRAN_BOUNDS}
+      maxBoundsViscosity={1}
       scrollWheelZoom={false}
       zoomControl={false}
+      zoomSnap={0.25}
       className="h-full w-full"
+      style={{ background: "#f4f5f6" }}
     >
       <TileLayer
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
@@ -114,7 +152,34 @@ export default function LeafletMap({ points, center, cityName }) {
         maxZoom={19}
       />
       <ZoomControl position="bottomright" />
-      <MapController center={center} points={points} />
+
+      {iranOnly && (
+        <>
+          <GeoJSON
+            data={IRAN_MASK}
+            interactive={false}
+            style={{
+              stroke: false,
+              fill: true,
+              fillColor: "#f4f5f6",
+              fillOpacity: 1,
+              fillRule: "evenodd",
+            }}
+          />
+          <GeoJSON
+            data={iranGeo}
+            interactive={false}
+            style={{
+              color: "#b9bec6",
+              weight: 1.5,
+              fill: false,
+              opacity: 1,
+            }}
+          />
+        </>
+      )}
+
+      <MapController center={center} points={points} iranOnly={iranOnly} />
 
       {markers.map(({ point, icon }) => (
         <Marker key={point.id} position={[point.lat, point.lng]} icon={icon}>

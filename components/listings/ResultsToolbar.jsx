@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { AnimatePresence, motion } from "motion/react";
-import { ArrowDown2, Home2, Location, Sort, TickCircle } from "iconsax-react";
+import { ArrowDown2, Location, Sort, TickCircle } from "iconsax-react";
 import { SORT_OPTIONS } from "@/lib/listings/constants";
 import { buildListingHref, sortLabel } from "@/lib/listings/query";
 import { toFaDigits } from "@/lib/auth";
@@ -66,17 +66,20 @@ export default function ResultsToolbar({
         </span>
       )}
 
-      <div className="flex min-w-0 items-center gap-2.5">
-        <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-primary-tint-1 text-primary">
-          <Home2 size="19" variant="Bold" color="currentColor" />
-        </span>
-        <div className="min-w-0">
-          <h2 className="truncate text-body-xxs font-bold text-gray-12">
+      <div className="min-w-0">
+        <h2 className="text-h5 text-gray-13">املاک اجاره‌ای</h2>
+        <p className="mt-1 flex flex-wrap items-center gap-x-2 gap-y-0.5 text-caption-md">
+          <span
+            className={`font-semibold ${
+              total > 0 ? "text-primary" : "text-gray-8"
+            }`}
+          >
             {total > 0
-              ? `${toFaDigits(total)} آگهی اجاره`
-              : "آگهی‌های اجاره"}
-          </h2>
-          <p className="mt-0.5 flex items-center gap-1 truncate text-[10px] text-gray-7">
+              ? `${toFaDigits(total)} مورد یافت شد`
+              : "موردی یافت نشد"}
+          </span>
+          <span className="text-gray-5">·</span>
+          <span className="flex min-w-0 items-center gap-1 truncate text-gray-7">
             <Location
               size="11"
               variant="Bold"
@@ -84,13 +87,13 @@ export default function ResultsToolbar({
               className="shrink-0 text-primary"
             />
             <span className="truncate">{locationLabel}</span>
-            {totalPages > 1 && (
-              <span className="shrink-0 text-gray-6">
-                · صفحهٔ {toFaDigits(page)} از {toFaDigits(totalPages)}
-              </span>
-            )}
-          </p>
-        </div>
+          </span>
+          {totalPages > 1 && (
+            <span className="shrink-0 text-gray-6">
+              · صفحهٔ {toFaDigits(page)} از {toFaDigits(totalPages)}
+            </span>
+          )}
+        </p>
       </div>
 
       <div className="flex shrink-0 items-center gap-2">

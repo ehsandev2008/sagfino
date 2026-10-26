@@ -12,7 +12,6 @@ import MobileMap from "@/components/listings/MobileMap";
 import MapPanel from "@/components/listings/map/MapPanel";
 import {
   getCityById,
-  getMapCenter,
   getProvinceById,
 } from "@/lib/listings/locations";
 import { parseListingSearchParams } from "@/lib/listings/query";
@@ -62,11 +61,7 @@ async function RentResults({ searchParams }) {
       ? `استان ${province.name}`
       : "سراسر ایران";
 
-  const mapCenter = city
-    ? getMapCenter(city)
-    : province
-      ? { lat: province.lat, lng: province.lng, zoom: 7.5 }
-      : IRAN_CENTER;
+  const mapCenter = IRAN_CENTER;
 
   return (
     <>
@@ -124,6 +119,7 @@ async function RentResults({ searchParams }) {
               center={mapCenter}
               cityName={city?.name ?? province?.name}
               total={result.total}
+              iranOnly
             />
           </div>
         </aside>
@@ -134,6 +130,7 @@ async function RentResults({ searchParams }) {
         center={mapCenter}
         cityName={city?.name ?? province?.name}
         total={result.total}
+        iranOnly
       />
     </>
   );
