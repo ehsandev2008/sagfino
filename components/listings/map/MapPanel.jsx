@@ -25,6 +25,7 @@ export default function MapPanel({
   cityName,
   total = 0,
   iranOnly = false,
+  compact = false,
 }) {
   return (
     <div className="relative h-full w-full overflow-hidden rounded-2xl border border-gray-4 bg-gray-2 shadow-[0_6px_30px_rgba(12,12,12,0.04)]">
@@ -36,7 +37,9 @@ export default function MapPanel({
         <div className="rounded-xl border border-white/60 bg-white/95 px-3 py-2 shadow-[0_8px_24px_rgba(12,12,12,0.1)] backdrop-blur-md">
           <span className="flex items-center gap-1.5 text-[11px] font-semibold text-gray-12">
             <Map1 size="15" variant="Bold" color="#cb1b1b" />
-            {toFaDigits(total || points.length)} آگهی روی نقشه
+            {compact
+              ? "موقعیت ملک"
+              : `${toFaDigits(total || points.length)} آگهی روی نقشه`}
           </span>
           <span className="mt-0.5 flex items-center gap-1 text-[9px] text-gray-7">
             <Location size="11" variant="Bold" color="currentColor" />
@@ -44,9 +47,11 @@ export default function MapPanel({
           </span>
         </div>
 
-        <div className="rounded-lg bg-white/90 px-2.5 py-1.5 text-[9px] text-gray-7 shadow-sm backdrop-blur-md">
-          برای جزئیات روی قیمت‌ها کلیک کنید
-        </div>
+        {!compact && (
+          <div className="rounded-lg bg-white/90 px-2.5 py-1.5 text-[9px] text-gray-7 shadow-sm backdrop-blur-md">
+            برای جزئیات روی قیمت‌ها کلیک کنید
+          </div>
+        )}
       </div>
 
       {points.length === 0 && (
@@ -63,12 +68,14 @@ export default function MapPanel({
         </div>
       )}
 
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 flex items-center justify-center pb-3">
-        <span className="flex items-center gap-1 rounded-full bg-white/90 px-3 py-1.5 text-[9px] text-gray-7 shadow-sm backdrop-blur-md">
-          <InfoCircle size="12" color="currentColor" />
-          نقشهٔ تعاملی · {toFaDigits(points.length)} نقطه در محدودهٔ انتخابی
-        </span>
-      </div>
+      {!compact && (
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 flex items-center justify-center pb-3">
+          <span className="flex items-center gap-1 rounded-full bg-white/90 px-3 py-1.5 text-[9px] text-gray-7 shadow-sm backdrop-blur-md">
+            <InfoCircle size="12" color="currentColor" />
+            نقشهٔ تعاملی · {toFaDigits(points.length)} نقطه در محدودهٔ انتخابی
+          </span>
+        </div>
+      )}
     </div>
   );
 }
