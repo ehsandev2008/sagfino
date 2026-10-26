@@ -60,6 +60,7 @@ async function RentResults({ searchParams }) {
       : "سراسر ایران";
 
   const mapCenter = IRAN_CENTER;
+  const hasResults = result.items.length > 0;
 
   return (
     <>
@@ -69,28 +70,36 @@ async function RentResults({ searchParams }) {
         selectedProvince={province}
       />
 
-      <div className="mt-3 grid grid-cols-1 gap-4 lg:grid-cols-12 lg:items-start">
+      <div
+        className={`mt-3 grid grid-cols-1 gap-4 ${
+          hasResults ? "lg:grid-cols-12 lg:items-start" : ""
+        }`}
+      >
         <div
           id="rent-results"
-          className="min-w-0 scroll-mt-28 lg:col-span-7 xl:col-span-8"
+          className={`min-w-0 scroll-mt-28 ${
+            hasResults ? "lg:col-span-7 xl:col-span-8" : ""
+          }`}
         >
-          <ResultsToolbar
-            filters={filters}
-            total={result.total}
-            page={result.page}
-            totalPages={result.totalPages}
-            locationLabel={locationLabel}
-          />
+          {hasResults && (
+            <ResultsToolbar
+              filters={filters}
+              total={result.total}
+              page={result.page}
+              totalPages={result.totalPages}
+              locationLabel={locationLabel}
+            />
+          )}
 
-          <div className="mt-3">
-            {result.items.length > 0 ? (
+          <div className={hasResults ? "mt-3" : ""}>
+            {hasResults ? (
               <ListingsGrid
                 listings={result.items}
                 agencies={agencies}
                 cityName={city?.name ?? province?.name}
               />
             ) : (
-              <EmptyState filters={filters} />
+              <EmptyState />
             )}
           </div>
 
@@ -103,33 +112,39 @@ async function RentResults({ searchParams }) {
 
           <RelatedLinks filters={filters} selectedCity={city} />
 
-          <p className="mt-3 flex items-center justify-center gap-1.5 text-[10px] text-gray-6">
-            نمایش {toFaDigits(result.items.length)} آگهی از مجموعاً{" "}
-            {toFaDigits(result.total)} نتیجه
-            {result.source === "demo" ? " · دادهٔ نمایشی" : ""}
-          </p>
+          {hasResults && (
+            <p className="mt-3 flex items-center justify-center gap-1.5 text-[10px] text-gray-6">
+              نمایش {toFaDigits(result.items.length)} آگهی از مجموعاً{" "}
+              {toFaDigits(result.total)} نتیجه
+              {result.source === "demo" ? " · دادهٔ نمایشی" : ""}
+            </p>
+          )}
         </div>
 
-        <aside className="hidden lg:col-span-5 lg:block xl:col-span-4">
-          <div className="sticky top-[108px] h-[calc(100vh-132px)] min-h-[540px] max-h-[900px]">
-            <MapPanel
-              points={result.mapPoints}
-              center={mapCenter}
-              cityName={city?.name ?? province?.name}
-              total={result.total}
-              iranOnly
-            />
-          </div>
-        </aside>
+        {hasResults && (
+          <aside className="hidden lg:col-span-5 lg:block xl:col-span-4">
+            <div className="sticky top-[108px] h-[calc(100vh-132px)] min-h-[540px] max-h-[900px]">
+              <MapPanel
+                points={result.mapPoints}
+                center={mapCenter}
+                cityName={city?.name ?? province?.name}
+                total={result.total}
+                iranOnly
+              />
+            </div>
+          </aside>
+        )}
       </div>
 
-      <MobileMap
-        points={result.mapPoints}
-        center={mapCenter}
-        cityName={city?.name ?? province?.name}
-        total={result.total}
-        iranOnly
-      />
+      {hasResults && (
+        <MobileMap
+          points={result.mapPoints}
+          center={mapCenter}
+          cityName={city?.name ?? province?.name}
+          total={result.total}
+          iranOnly
+        />
+      )}
     </>
   );
 }
