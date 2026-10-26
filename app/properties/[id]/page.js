@@ -89,8 +89,6 @@ async function PropertyContent({ params }) {
         key={property.code}
         images={property.images}
         title={property.title}
-        isVerified={property.isVerified}
-        isFeatured={property.isFeatured}
       />
 
       <div className="mt-4 grid grid-cols-1 gap-4 lg:grid-cols-12 lg:items-start">

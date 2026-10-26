@@ -9,7 +9,6 @@ import {
   CloseCircle,
   Gallery,
   Maximize2,
-  TickCircle,
 } from "iconsax-react";
 import { toFaDigits } from "@/lib/auth";
 
@@ -49,12 +48,7 @@ function resolvePhotos(images) {
  * - موبایل: اسلایدر تمام‌عرض با سوایپ
  * - کلیک روی هر تصویر: نمایش تمام‌صفحه با پیمایش کلیدهای جهت‌دار
  */
-export default function PropertyGallery({
-  images = [],
-  title,
-  isVerified = false,
-  isFeatured = false,
-}) {
+export default function PropertyGallery({ images = [], title }) {
   const photos = useMemo(() => resolvePhotos(images), [images]);
   const count = photos.length;
 
@@ -151,22 +145,6 @@ export default function PropertyGallery({
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [isLightboxOpen, lightboxIndex, count]);
 
-  const badges = (
-    <span className="pointer-events-none absolute right-3 top-3 z-10 flex flex-wrap gap-1.5">
-      {isVerified && (
-        <span className="flex items-center gap-1 rounded-md bg-success/90 px-2 py-1 text-[10px] font-medium text-white shadow-sm backdrop-blur-sm">
-          <TickCircle size="12" variant="Bold" color="currentColor" />
-          تاییدشده
-        </span>
-      )}
-      {isFeatured && (
-        <span className="rounded-md bg-primary/90 px-2 py-1 text-[10px] font-medium text-white shadow-sm backdrop-blur-sm">
-          آگهی ویژه
-        </span>
-      )}
-    </span>
-  );
-
   return (
     <section aria-label="گالری تصاویر آگهی">
       {/* دسکتاپ: موزاییک پنج‌کادری */}
@@ -195,13 +173,10 @@ export default function PropertyGallery({
                     : "col-span-3 row-span-2"
                 }
                 overlay={
-                  <>
-                    {badges}
-                    <span className="pointer-events-none absolute bottom-3 right-3 z-10 flex items-center gap-1 rounded-lg bg-black/50 px-2.5 py-1.5 text-[10px] text-white backdrop-blur-sm">
-                      <Gallery size="13" color="currentColor" />
-                      مشاهدهٔ {toFaDigits(count)} عکس
-                    </span>
-                  </>
+                  <span className="pointer-events-none absolute bottom-3 right-3 z-10 flex items-center gap-1 rounded-lg bg-black/50 px-2.5 py-1.5 text-[10px] text-white backdrop-blur-sm">
+                    <Gallery size="13" color="currentColor" />
+                    مشاهدهٔ {toFaDigits(count)} عکس
+                  </span>
                 }
               />
 
@@ -243,7 +218,6 @@ export default function PropertyGallery({
                   sizes={slots.length === 2 ? "50vw" : "100vw"}
                   onOpen={openLightbox}
                   className="col-span-1 row-span-1"
-                  overlay={index === 0 ? badges : null}
                 />
               ))}
             </div>
@@ -308,7 +282,6 @@ export default function PropertyGallery({
             </AnimatePresence>
 
             <div className="pointer-events-none absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-black/55 to-transparent" />
-            {badges}
 
             <span className="pointer-events-none absolute bottom-3 right-3 z-10 flex items-center gap-1 rounded-lg bg-black/50 px-2.5 py-1.5 text-[10px] text-white backdrop-blur-sm">
               <Gallery size="12" color="currentColor" />
