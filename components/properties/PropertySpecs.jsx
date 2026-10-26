@@ -17,6 +17,7 @@ import {
   formatPriceCompact,
 } from "@/lib/listings/format";
 import { toEnglishDigits, toFaDigits } from "@/lib/auth";
+import PropertySummary from "./PropertySummary";
 
 /** سال شمسی جاری برای محاسبهٔ سن بنا */
 function getCurrentPersianYear() {
@@ -168,6 +169,10 @@ export default function PropertySpecs({ property }) {
 
   return (
     <section className="rounded-2xl border border-gray-4 bg-white p-4 shadow-[0_4px_24px_rgba(12,12,12,0.03)] sm:p-5">
+      <PropertySummary property={property} />
+
+      <div className="my-4 border-t border-gray-3" />
+
       <div className="flex flex-wrap items-center justify-between gap-2">
         <div>
           <h2 className="flex items-center gap-1.5 text-body-xxs font-bold text-gray-12 sm:text-body-s">

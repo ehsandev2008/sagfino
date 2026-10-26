@@ -5,7 +5,7 @@ import { toFaDigits } from "@/lib/auth";
 /** خلاصهٔ بالای جزئیات: عنوان، نشان‌ها و اطلاعات تماس سریع آگهی */
 export default function PropertySummary({ property }) {
   return (
-    <section className="rounded-2xl border border-gray-4 bg-white p-4 shadow-[0_4px_24px_rgba(12,12,12,0.03)] sm:p-5">
+    <div>
       <div className="flex flex-wrap items-center gap-1.5">
         <span className="rounded-md bg-primary-tint-1 px-2 py-1 text-[10px] font-medium text-primary">
           {property.propertyTypeLabel}
@@ -49,6 +49,6 @@ export default function PropertySummary({ property }) {
           {toFaDigits(property.viewsCount ?? 0)} بازدید
         </span>
       </div>
-    </section>
+    </div>
   );
 }

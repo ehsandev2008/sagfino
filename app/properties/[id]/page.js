@@ -10,7 +10,6 @@ import {
   Warning2,
 } from "iconsax-react";
 import PropertyGallery from "@/components/properties/PropertyGallery";
-import PropertySummary from "@/components/properties/PropertySummary";
 import PropertySpecs from "@/components/properties/PropertySpecs";
 import PropertyContact from "@/components/properties/PropertyContact";
 import ListingCard from "@/components/listings/ListingCard";
@@ -96,8 +95,6 @@ async function PropertyContent({ params }) {
 
       <div className="mt-4 grid grid-cols-1 gap-4 lg:grid-cols-12 lg:items-start">
         <div className="space-y-4 lg:col-span-8">
-          <PropertySummary property={property} />
-
           <PropertySpecs property={property} />
 
           <section className="rounded-2xl border border-gray-4 bg-white p-4 shadow-[0_4px_24px_rgba(12,12,12,0.03)] sm:p-5">
