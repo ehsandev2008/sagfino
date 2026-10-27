@@ -94,14 +94,9 @@ async function PropertyContent({ params }) {
           />
         </div>
 
-        <aside className="lg:sticky lg:top-4 lg:col-span-2">
-          <div className="mb-2 flex items-center justify-between gap-2">
-            <h2 className="text-body-xxs font-bold text-gray-12">
-              اطلاعات انتشاردهنده
-            </h2>
-            <span className="text-[10px] text-gray-7">دفتر املاک</span>
-          </div>
-          <PropertyContact agency={property.agency} code={property.code} />
+        <aside className="min-w-0 lg:sticky lg:top-28 lg:col-span-2 lg:self-start">
+          <h2 className="sr-only">اطلاعات انتشاردهنده</h2>
+          <PropertyContact agency={property.agency} />
         </aside>
       </div>
 
