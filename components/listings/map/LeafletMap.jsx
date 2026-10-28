@@ -42,16 +42,16 @@ const IRAN_MASK = {
   },
 };
 
-function createPriceIcon(point) {
+function createPriceIcon(point, large = false) {
   const label = formatPriceShort(point.rent);
   return L.divIcon({
     className: "saghfino-map-pin",
     html: `<div class="saghfino-pin ${
       point.isFeatured ? "saghfino-pin--featured" : ""
-    }"><span class="saghfino-pin__body">${label}</span><span class="saghfino-pin__arrow"></span></div>`,
-    iconSize: [82, 34],
-    iconAnchor: [41, 34],
-    popupAnchor: [0, -32],
+    } ${large ? "saghfino-pin--large" : ""}"><span class="saghfino-pin__body">${label}</span><span class="saghfino-pin__arrow"></span></div>`,
+    iconSize: large ? [112, 42] : [82, 34],
+    iconAnchor: large ? [56, 42] : [41, 34],
+    popupAnchor: [0, large ? -40 : -32],
   });
 }
 
@@ -122,13 +122,18 @@ function MapController({ center, points, iranOnly = false }) {
   return null;
 }
 
-export default function LeafletMap({ points, center, iranOnly = false }) {
+export default function LeafletMap({
+  points,
+  center,
+  iranOnly = false,
+  largePins = false,
+}) {
   const markers = useMemo(
     () =>
       points
         .filter((point) => Number.isFinite(point.lat) && Number.isFinite(point.lng))
-        .map((point) => ({ point, icon: createPriceIcon(point) })),
-    [points]
+        .map((point) => ({ point, icon: createPriceIcon(point, largePins) })),
+    [points, largePins]
   );
 
   return (
@@ -195,28 +200,50 @@ export default function LeafletMap({ points, center, iranOnly = false }) {
                     className="object-cover"
                   />
                 ) : null}
-                <span className="absolute bottom-2 right-2 rounded-md bg-white/92 px-2 py-1 text-[9px] font-medium text-gray-11">
+                <span
+                  className={`absolute bottom-2 right-2 rounded-md bg-white/92 px-2 py-1 font-medium text-gray-11 ${
+                    largePins ? "text-base" : "text-[9px]"
+                  }`}
+                >
                   {point.propertyTypeLabel}
                 </span>
               </span>
               <span className="block p-3">
-                <span className="line-clamp-2 block text-[11px] font-semibold leading-5 text-gray-12">
+                <span
+                  className={`line-clamp-2 block font-semibold text-gray-12 ${
+                    largePins ? "text-base leading-7" : "text-[11px] leading-5"
+                  }`}
+                >
                   {point.title}
                 </span>
-                <span className="mt-1 flex items-center justify-between gap-2 text-[10px] text-gray-7">
+                <span
+                  className={`mt-1 flex items-center justify-between gap-2 text-gray-9 ${
+                    largePins ? "text-base" : "text-[10px]"
+                  }`}
+                >
                   <span className="truncate">
                     {point.neighborhood}، {point.cityName}
                   </span>
                   <span className="shrink-0">{toFaDigits(point.area)} متر</span>
                 </span>
                 <span className="mt-2 flex items-center justify-between gap-2 border-t border-gray-2 pt-2">
-                  <span className="text-[10px] text-gray-7">
+                  <span
+                    className={`text-gray-9 ${largePins ? "text-base" : "text-[10px]"}`}
+                  >
                     اجاره
-                    <span className="mr-1 block text-[11px] font-bold text-primary">
+                    <span
+                      className={`mr-1 block font-bold text-primary ${
+                        largePins ? "text-base" : "text-[11px]"
+                      }`}
+                    >
                       {point.rentLabel}
                     </span>
                   </span>
-                  <span className="rounded-lg bg-gray-1 px-2 py-1 text-[9px] text-gray-9">
+                  <span
+                    className={`rounded-lg bg-gray-1 px-2 py-1 text-gray-9 ${
+                      largePins ? "text-base" : "text-[9px]"
+                    }`}
+                  >
                     مشاهده آگهی
                   </span>
                 </span>

@@ -81,9 +81,9 @@ export function PropertyReportButton() {
       onClick={() =>
         toast.success("گزارش تخلف ثبت شد و آگهی در حال بررسی است.")
       }
-      className="flex items-center gap-1 text-[10px] text-gray-7 transition-colors hover:text-error"
+      className="flex items-center gap-1.5 text-base text-gray-9 transition-colors hover:text-error"
     >
-      <Warning2 size="13" variant="Bold" color="#c30000" />
+      <Warning2 size="18" variant="Bold" color="#c30000" />
       گزارش تخلف آگهی
     </button>
   );
@@ -103,8 +103,8 @@ export function PropertyFeedback() {
   };
 
   return (
-    <div className="flex items-center gap-1.5">
-      <span className="text-[10px] text-gray-7">
+    <div className="flex flex-wrap items-center gap-2">
+      <span className="text-base text-gray-9">
         بازخورد خود درباره این آگهی چیست؟
       </span>
       <button
@@ -112,27 +112,27 @@ export function PropertyFeedback() {
         onClick={() => voteFor("up")}
         aria-label="بله، مفید بود"
         aria-pressed={vote === "up"}
-        className={`flex h-7 w-7 items-center justify-center rounded-lg border transition-colors ${
+        className={`flex h-9 w-9 items-center justify-center rounded-lg border transition-colors ${
           vote === "up"
             ? "border-success/30 bg-success-light-2 text-success"
-            : "border-gray-4 bg-white text-gray-7 hover:text-success"
+            : "border-gray-4 bg-white text-gray-9 hover:text-success"
         }`}
       >
-        <Like size="14" variant={vote === "up" ? "Bold" : "Outline"} color="currentColor" />
+        <Like size="18" variant={vote === "up" ? "Bold" : "Outline"} color="currentColor" />
       </button>
       <button
         type="button"
         onClick={() => voteFor("down")}
         aria-label="خیر، مفید نبود"
         aria-pressed={vote === "down"}
-        className={`flex h-7 w-7 items-center justify-center rounded-lg border transition-colors ${
+        className={`flex h-9 w-9 items-center justify-center rounded-lg border transition-colors ${
           vote === "down"
             ? "border-error/30 bg-error-light-2 text-error"
-            : "border-gray-4 bg-white text-gray-7 hover:text-error"
+            : "border-gray-4 bg-white text-gray-9 hover:text-error"
         }`}
       >
         <Dislike
-          size="14"
+          size="18"
           variant={vote === "down" ? "Bold" : "Outline"}
           color="currentColor"
         />

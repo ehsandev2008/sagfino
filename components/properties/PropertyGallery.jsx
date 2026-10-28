@@ -173,8 +173,8 @@ export default function PropertyGallery({ images = [], title }) {
                     : "col-span-3 row-span-2"
                 }
                 overlay={
-                  <span className="pointer-events-none absolute bottom-3 right-3 z-10 flex items-center gap-1 rounded-lg bg-black/50 px-2.5 py-1.5 text-[10px] text-white backdrop-blur-sm">
-                    <Gallery size="13" color="currentColor" />
+                  <span className="pointer-events-none absolute bottom-3 right-3 z-10 flex items-center gap-1.5 rounded-lg bg-black/50 px-3 py-1.5 text-base text-white backdrop-blur-sm">
+                    <Gallery size="16" color="currentColor" />
                     مشاهدهٔ {toFaDigits(count)} عکس
                   </span>
                 }
@@ -283,17 +283,17 @@ export default function PropertyGallery({ images = [], title }) {
 
             <div className="pointer-events-none absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-black/55 to-transparent" />
 
-            <span className="pointer-events-none absolute bottom-3 right-3 z-10 flex items-center gap-1 rounded-lg bg-black/50 px-2.5 py-1.5 text-[10px] text-white backdrop-blur-sm">
-              <Gallery size="12" color="currentColor" />
+            <span className="pointer-events-none absolute bottom-3 right-3 z-10 flex items-center gap-1.5 rounded-lg bg-black/50 px-3 py-1.5 text-base text-white backdrop-blur-sm">
+              <Gallery size="16" color="currentColor" />
               {toFaDigits(mobileIndex + 1)} از {toFaDigits(count)}
             </span>
 
             <button
               type="button"
               onClick={() => openLightbox(mobileIndex)}
-              className="absolute bottom-3 left-3 z-20 flex items-center gap-1 rounded-lg bg-white/95 px-2.5 py-1.5 text-[10px] font-medium text-gray-11 shadow-sm backdrop-blur transition-colors hover:bg-white hover:text-primary"
+              className="absolute bottom-3 left-3 z-20 flex items-center gap-1.5 rounded-lg bg-white/95 px-3 py-1.5 text-base font-medium text-gray-11 shadow-sm backdrop-blur transition-colors hover:bg-white hover:text-primary"
             >
-              <Maximize2 size="12" color="currentColor" />
+              <Maximize2 size="16" color="currentColor" />
               مشاهدهٔ همه
             </button>
 
@@ -357,8 +357,8 @@ export default function PropertyGallery({ images = [], title }) {
             className="fixed inset-0 z-[120] flex flex-col bg-black/95 backdrop-blur-sm"
           >
             <div className="flex items-center justify-between gap-3 px-4 py-3 text-white sm:px-6">
-              <span className="flex items-center gap-1.5 text-[11px] text-white/80">
-                <Gallery size="15" color="currentColor" />
+              <span className="flex items-center gap-1.5 text-base text-white/80">
+                <Gallery size="18" color="currentColor" />
                 {toFaDigits(lightboxIndex + 1)} از {toFaDigits(count)}
               </span>
               <button

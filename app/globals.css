@@ -388,6 +388,11 @@ body {
   line-height: 1.2;
 }
 
+.saghfino-pin--large .saghfino-pin__body {
+  padding: 6px 12px;
+  font-size: 16px;
+}
+
 .saghfino-pin--featured .saghfino-pin__body,
 .saghfino-pin:hover .saghfino-pin__body {
   background: #cb1b1b;

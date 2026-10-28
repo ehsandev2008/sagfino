@@ -76,7 +76,7 @@ export default function PropertyContact({ agency }) {
                 <Buildings2 size="18" color="currentColor" />
               </span>
             )}
-            <span className="min-w-0 truncate text-sm font-bold text-gray-12 sm:text-[15px] xl:text-base">
+            <span className="min-w-0 truncate text-base font-bold text-gray-12">
               {agencyName}
             </span>
           </div>
@@ -85,11 +85,11 @@ export default function PropertyContact({ agency }) {
             {agentName}
           </p>
 
-          <p className="mt-1 text-start text-xs text-gray-9 sm:text-[13px]">
+          <p className="mt-1 text-start text-base text-gray-9">
             {ratingLabel ? (
               <>
                 امتیاز{" "}
-                <span className="font-medium text-gray-10">{ratingLabel}</span>{" "}
+                <span className="font-medium text-gray-9">{ratingLabel}</span>{" "}
                 از ۵
               </>
             ) : (
@@ -97,7 +97,7 @@ export default function PropertyContact({ agency }) {
             )}
           </p>
 
-          <p className="mt-1 text-start text-xs text-gray-9 sm:text-[13px]">
+          <p className="mt-1 text-start text-base text-gray-10">
             {activeAdsLabel} آگهی فعال
           </p>
 
@@ -106,7 +106,7 @@ export default function PropertyContact({ agency }) {
               <div className="mt-4 flex items-center gap-2 sm:mt-5">
                 <a
                   href={`tel:${phone}`}
-                  className="flex h-12 flex-1 items-center justify-center gap-2 rounded-xl bg-primary text-[13px] font-medium text-white shadow-[0_8px_20px_rgba(203,27,27,0.22)] transition-colors hover:bg-primary-shade-1 sm:text-sm"
+                  className="flex h-12 flex-1 items-center justify-center gap-2 rounded-xl bg-primary text-base font-medium text-white shadow-[0_8px_20px_rgba(203,27,27,0.22)] transition-colors hover:bg-primary-shade-1"
                 >
                   <Call size="17" variant="Bold" color="currentColor" />
                   <span dir="ltr">{toFaDigits(phone)}</span>
@@ -125,13 +125,13 @@ export default function PropertyContact({ agency }) {
               <button
                 type="button"
                 onClick={() => setRevealed(true)}
-                className="mt-4 flex h-12 w-full items-center justify-center rounded-xl bg-primary text-[13px] font-medium text-white shadow-[0_8px_20px_rgba(203,27,27,0.22)] transition-colors hover:bg-primary-shade-1 active:scale-[0.99] sm:mt-5 sm:text-sm"
+                className="mt-4 flex h-12 w-full items-center justify-center rounded-xl bg-primary text-base font-medium text-white shadow-[0_8px_20px_rgba(203,27,27,0.22)] transition-colors hover:bg-primary-shade-1 active:scale-[0.99] sm:mt-5"
               >
                 اطلاعات تماس
               </button>
             )
           ) : (
-            <p className="mt-4 flex h-12 items-center justify-center rounded-xl border border-gray-4 bg-gray-1 text-xs text-gray-9 sm:mt-5">
+            <p className="mt-4 flex h-12 items-center justify-center rounded-xl border border-gray-4 bg-gray-1 text-base text-gray-9 sm:mt-5">
               شمارهٔ تماس ثبت نشده است
             </p>
           )}

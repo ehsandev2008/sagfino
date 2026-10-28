@@ -9,7 +9,7 @@ import { Bookmark, Home2 } from "iconsax-react";
  * کارت آگهی صفحهٔ اجاره — همان کارت صفحهٔ Home Pro
  * تصویر، زمان انتشار، عنوان، آدرس و مبلغ رهن و اجاره.
  */
-export default function ListingCard({ property, priority = false }) {
+export default function ListingCard({ property, priority = false, large = false }) {
   const [saved, setSaved] = useState(false);
   const deposit =
     property.depositLabel === "توافقی"
@@ -44,7 +44,11 @@ export default function ListingCard({ property, priority = false }) {
           </div>
         )}
 
-        <span className="absolute left-3 top-3 flex items-center justify-center rounded-[4px] bg-black/40 px-2 py-1 text-caption-md text-white backdrop-blur-sm lg:text-body-xs">
+        <span
+          className={`absolute left-3 top-3 flex items-center justify-center rounded-[4px] bg-black/40 px-2 py-1 text-white backdrop-blur-sm ${
+            large ? "text-base" : "text-caption-md lg:text-body-xs"
+          }`}
+        >
           {property.timeLabel}
         </span>
       </div>
@@ -52,7 +56,13 @@ export default function ListingCard({ property, priority = false }) {
       <div className="flex flex-1 flex-col px-3.5 pb-5 pt-2.5 lg:pb-6">
         <div className="flex flex-1 flex-col gap-1">
           <div className="flex items-center justify-between gap-2">
-            <h3 className="truncate text-body-xxs font-normal text-gray-8 lg:text-body-xs">
+            <h3
+              className={`truncate font-normal ${
+                large
+                  ? "text-base text-gray-9"
+                  : "text-body-xxs text-gray-8 lg:text-body-xs"
+              }`}
+            >
               {property.title}
             </h3>
             <button
@@ -74,15 +84,29 @@ export default function ListingCard({ property, priority = false }) {
             </button>
           </div>
 
-          <p className="truncate text-body-xxs font-normal text-gray-10 lg:text-body-xs">
+          <p
+            className={`truncate font-normal ${
+              large
+                ? "text-base text-gray-10"
+                : "text-body-xxs text-gray-10 lg:text-body-xs"
+            }`}
+          >
             {property.address}
           </p>
 
-          <p className="text-body-xxs font-bold text-gray-11 lg:text-body-xs">
+          <p
+            className={`font-bold text-gray-11 ${
+              large ? "text-base" : "text-body-xxs lg:text-body-xs"
+            }`}
+          >
             {deposit}
           </p>
 
-          <p className="text-body-xxs font-bold text-gray-11 lg:text-body-xs">
+          <p
+            className={`font-bold text-gray-11 ${
+              large ? "text-base" : "text-body-xxs lg:text-body-xs"
+            }`}
+          >
             {rent}
           </p>
         </div>

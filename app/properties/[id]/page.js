@@ -107,13 +107,13 @@ async function PropertyContent({ params }) {
               <h2 className="text-body-xs font-bold text-gray-12 sm:text-body-s">
                 آگهی‌های مشابه در {property.cityName}
               </h2>
-              <p className="mt-1 text-[10px] text-gray-7">
+              <p className="mt-1 text-base text-gray-9">
                 گزینه‌های دیگری که ممکن است به کارتان بیاید
               </p>
             </div>
             <Link
               href={`/rent?city=${property.cityId}`}
-              className="nav-link flex shrink-0 items-center gap-1 text-[11px] text-gray-9 transition-colors hover:text-primary"
+              className="nav-link flex shrink-0 items-center gap-1.5 text-base text-gray-10 transition-colors hover:text-primary"
             >
               مشاهده همه
               <ArrowLeft2 size="14" color="currentColor" />
@@ -122,7 +122,7 @@ async function PropertyContent({ params }) {
 
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-3">
             {similarListings.map((item) => (
-              <ListingCard key={item.id} property={item} />
+              <ListingCard key={item.id} property={item} large />
             ))}
           </div>
         </section>
