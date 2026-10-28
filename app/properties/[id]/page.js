@@ -96,7 +96,7 @@ async function PropertyContent({ params }) {
 
         <aside className="min-w-0 lg:sticky lg:top-28 lg:col-span-2 lg:self-start">
           <h2 className="sr-only">اطلاعات انتشاردهنده</h2>
-          <PropertyContact agency={property.agency} />
+          <PropertyContact agency={property.agency} code={property.code} />
         </aside>
       </div>
 

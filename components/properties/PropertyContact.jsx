@@ -2,10 +2,10 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { Buildings2, Call, Copy, Profile } from "iconsax-react";
-import { toast } from "@/components/ui/toast";
+import { Buildings2, Profile } from "iconsax-react";
 import { toFaDigits } from "@/lib/auth";
 import { formatNumberFa } from "@/lib/listings/format";
+import PropertyContactModal from "./PropertyContactModal";
 
 /** نام دفتر را برای نمایش کوتاه می‌کند: «مشاور املاک سبز» → «املاک سبز» */
 function agencyDisplayName(name = "") {
@@ -17,28 +17,18 @@ function agencyDisplayName(name = "") {
  * لوگو و نام دفتر، تصویر و نام مشاور، امتیاز، تعداد آگهی فعال
  * و دکمهٔ نمایش اطلاعات تماس.
  */
-export default function PropertyContact({ agency }) {
-  const [revealed, setRevealed] = useState(false);
+export default function PropertyContact({ agency, code }) {
+  const [contactOpen, setContactOpen] = useState(false);
 
   const agencyName = agencyDisplayName(agency?.name);
   const agentName = agency?.agentName?.trim() || "مشاور املاک";
   const agentAvatar = agency?.agentAvatar;
-  const phone = agency?.phones?.find(Boolean) ?? "";
   const rating = Number(agency?.rating);
   const ratingLabel =
     Number.isFinite(rating) && rating > 0
       ? toFaDigits(String(rating).replace(".", "٫"))
       : null;
   const activeAdsLabel = formatNumberFa(Number(agency?.activeAds) || 0);
-
-  const copyPhone = async () => {
-    try {
-      await navigator.clipboard.writeText(phone);
-      toast.success("شمارهٔ تماس کپی شد.");
-    } catch {
-      toast.error("کپی شمارهٔ تماس ممکن نشد.");
-    }
-  };
 
   return (
     <div className="rounded-2xl border border-gray-4 bg-white p-5 shadow-[0_10px_35px_rgba(12,12,12,0.05)] sm:rounded-3xl sm:p-6 xl:p-7">
@@ -101,42 +91,23 @@ export default function PropertyContact({ agency }) {
             {activeAdsLabel} آگهی فعال
           </p>
 
-          {phone ? (
-            revealed ? (
-              <div className="mt-4 flex items-center gap-2 sm:mt-5">
-                <a
-                  href={`tel:${phone}`}
-                  className="flex h-12 flex-1 items-center justify-center gap-2 rounded-xl bg-primary text-base font-medium text-white shadow-[0_8px_20px_rgba(203,27,27,0.22)] transition-colors hover:bg-primary-shade-1"
-                >
-                  <Call size="17" variant="Bold" color="currentColor" />
-                  <span dir="ltr">{toFaDigits(phone)}</span>
-                </a>
-                <button
-                  type="button"
-                  onClick={copyPhone}
-                  aria-label="کپی شمارهٔ تماس"
-                  title="کپی شمارهٔ تماس"
-                  className="grid h-12 w-12 shrink-0 place-items-center rounded-xl border border-gray-4 bg-white text-gray-9 transition-colors hover:border-primary/30 hover:bg-primary-tint-1 hover:text-primary"
-                >
-                  <Copy size="17" color="currentColor" />
-                </button>
-              </div>
-            ) : (
-              <button
-                type="button"
-                onClick={() => setRevealed(true)}
-                className="mt-4 flex h-12 w-full items-center justify-center rounded-xl bg-primary text-base font-medium text-white shadow-[0_8px_20px_rgba(203,27,27,0.22)] transition-colors hover:bg-primary-shade-1 active:scale-[0.99] sm:mt-5"
-              >
-                اطلاعات تماس
-              </button>
-            )
-          ) : (
-            <p className="mt-4 flex h-12 items-center justify-center rounded-xl border border-gray-4 bg-gray-1 text-base text-gray-9 sm:mt-5">
-              شمارهٔ تماس ثبت نشده است
-            </p>
-          )}
+          <button
+            type="button"
+            onClick={() => setContactOpen(true)}
+            aria-haspopup="dialog"
+            className="mt-4 flex h-12 w-full items-center justify-center rounded-xl bg-primary text-base font-medium text-white shadow-[0_8px_20px_rgba(203,27,27,0.22)] transition-colors hover:bg-primary-shade-1 active:scale-[0.99] sm:mt-5"
+          >
+            اطلاعات تماس
+          </button>
         </div>
       </div>
+
+      <PropertyContactModal
+        open={contactOpen}
+        onClose={() => setContactOpen(false)}
+        agency={agency}
+        code={code}
+      />
     </div>
   );
 }

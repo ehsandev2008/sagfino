@@ -9,6 +9,7 @@ import {
   Warning2,
 } from "iconsax-react";
 import { toast } from "@/components/ui/toast";
+import PropertyReportModal from "./PropertyReportModal";
 
 /**
  * دکمه‌های اشتراک‌گذاری و نشان کردن آگهی در سربرگ صفحهٔ جزئیات.
@@ -75,17 +76,22 @@ export function PropertyHeaderActions({ title }) {
 
 /** دکمهٔ گزارش تخلف آگهی در ردیف اطلاعات تکمیلی */
 export function PropertyReportButton() {
+  const [open, setOpen] = useState(false);
+
   return (
-    <button
-      type="button"
-      onClick={() =>
-        toast.success("گزارش تخلف ثبت شد و آگهی در حال بررسی است.")
-      }
-      className="flex items-center gap-1.5 text-base text-gray-9 transition-colors hover:text-error"
-    >
-      <Warning2 size="18" variant="Bold" color="#c30000" />
-      گزارش تخلف آگهی
-    </button>
+    <>
+      <button
+        type="button"
+        onClick={() => setOpen(true)}
+        aria-haspopup="dialog"
+        className="flex items-center gap-1.5 text-base text-gray-9 transition-colors hover:text-error"
+      >
+        <Warning2 size="18" variant="Bold" color="#c30000" />
+        گزارش تخلف آگهی
+      </button>
+
+      <PropertyReportModal open={open} onClose={() => setOpen(false)} />
+    </>
   );
 }
 
