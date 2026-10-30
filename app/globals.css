@@ -215,6 +215,18 @@ body {
   font-family: var(--font-sans);
 }
 
+/* ── صفحات تمام‌صفحه (مثل ثبت آگهی) ──
+   صفحه با نشانگر data-bare-page بدون هدر و فوتر و بدون فاصلهٔ بالا
+   نمایش داده می‌شود؛ انتخابگر :has بدون فلش اولیه اعمال می‌شود. */
+body:has([data-bare-page]) header,
+body:has([data-bare-page]) footer {
+  display: none;
+}
+
+body:has([data-bare-page]) main {
+  padding-top: 0;
+}
+
 /* ── لینک با خط زیرین متحرک (راست‌به‌چپ: از راست کشیده می‌شود) ──
    usage: className="nav-link ..." */
 .nav-link {
