@@ -30,8 +30,6 @@ export default function PropertyReportModal({ open, onClose }) {
   };
 
   const handleClose = useCallback(() => {
-    setReasons([]);
-    setComment("");
     onClose?.();
   }, [onClose]);
 

@@ -77,12 +77,18 @@ export function PropertyHeaderActions({ title }) {
 /** دکمهٔ گزارش تخلف آگهی در ردیف اطلاعات تکمیلی */
 export function PropertyReportButton() {
   const [open, setOpen] = useState(false);
+  const [session, setSession] = useState(0);
+
+  const openReport = () => {
+    setSession((current) => current + 1);
+    setOpen(true);
+  };
 
   return (
     <>
       <button
         type="button"
-        onClick={() => setOpen(true)}
+        onClick={openReport}
         aria-haspopup="dialog"
         className="flex items-center gap-1.5 text-base text-gray-9 transition-colors hover:text-error"
       >
@@ -90,7 +96,11 @@ export function PropertyReportButton() {
         گزارش تخلف آگهی
       </button>
 
-      <PropertyReportModal open={open} onClose={() => setOpen(false)} />
+      <PropertyReportModal
+        key={session}
+        open={open}
+        onClose={() => setOpen(false)}
+      />
     </>
   );
 }

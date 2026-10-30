@@ -19,6 +19,7 @@ function agencyDisplayName(name = "") {
  */
 export default function PropertyContact({ agency, code }) {
   const [contactOpen, setContactOpen] = useState(false);
+  const [contactSession, setContactSession] = useState(0);
 
   const agencyName = agencyDisplayName(agency?.name);
   const agentName = agency?.agentName?.trim() || "مشاور املاک";
@@ -93,7 +94,10 @@ export default function PropertyContact({ agency, code }) {
 
           <button
             type="button"
-            onClick={() => setContactOpen(true)}
+            onClick={() => {
+              setContactSession((current) => current + 1);
+              setContactOpen(true);
+            }}
             aria-haspopup="dialog"
             className="mt-4 flex h-12 w-full items-center justify-center rounded-xl bg-primary text-base font-medium text-white shadow-[0_8px_20px_rgba(203,27,27,0.22)] transition-colors hover:bg-primary-shade-1 active:scale-[0.99] sm:mt-5"
           >
@@ -103,6 +107,7 @@ export default function PropertyContact({ agency, code }) {
       </div>
 
       <PropertyContactModal
+        key={contactSession}
         open={contactOpen}
         onClose={() => setContactOpen(false)}
         agency={agency}

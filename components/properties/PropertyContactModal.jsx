@@ -33,7 +33,6 @@ export default function PropertyContactModal({ open, onClose, agency, code }) {
     : agencyName;
 
   const handleClose = useCallback(() => {
-    setRating(1);
     onClose?.();
   }, [onClose]);
 
