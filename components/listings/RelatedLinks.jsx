@@ -7,7 +7,8 @@ function cityByName(name) {
   return locations.cities.find((city) => city.name === name) ?? null;
 }
 
-function buildLinks(filters, selectedCity) {
+function buildLinks(filters, selectedCity, listingType = "rent") {
+  const verb = listingType === "buy" ? "خرید" : "اجاره";
   const links = [];
   const add = (label, overrides) => {
     if (links.some((item) => item.label === label)) return;
@@ -17,10 +18,10 @@ function buildLinks(filters, selectedCity) {
   const focusCity = selectedCity ?? cityByName("تهران");
 
   if (focusCity) {
-    add(`اجاره آپارتمان در ${focusCity.name}`, { city: focusCity.id, type: "apartment" });
-    add(`اجاره ویلا در ${focusCity.name}`, { city: focusCity.id, type: "villa" });
+    add(`${verb} آپارتمان در ${focusCity.name}`, { city: focusCity.id, type: "apartment" });
+    add(`${verb} ویلا در ${focusCity.name}`, { city: focusCity.id, type: "villa" });
     add(`خانه‌های ۲ اتاقه در ${focusCity.name}`, { city: focusCity.id, rooms: 2 });
-    add(`اجاره دفتر کار در ${focusCity.name}`, { city: focusCity.id, type: "office" });
+    add(`${verb} دفتر کار در ${focusCity.name}`, { city: focusCity.id, type: "office" });
   }
 
   const mashhad = cityByName("مشهد");
@@ -30,27 +31,27 @@ function buildLinks(filters, selectedCity) {
   const kish = cityByName("کیش");
   const karaj = cityByName("کرج");
 
-  if (mashhad) add("اجاره آپارتمان در مشهد", { city: mashhad.id, type: "apartment" });
-  if (isfahan) add("اجاره ویلا در اصفهان", { city: isfahan.id, type: "villa" });
-  if (shiraz) add("اجاره خانه در شیراز", { city: shiraz.id });
-  if (rasht) add("اجاره ویلا در رشت", { city: rasht.id, type: "villa" });
+  if (mashhad) add(`${verb} آپارتمان در مشهد`, { city: mashhad.id, type: "apartment" });
+  if (isfahan) add(`${verb} ویلا در اصفهان`, { city: isfahan.id, type: "villa" });
+  if (shiraz) add(`${verb} خانه در شیراز`, { city: shiraz.id });
+  if (rasht) add(`${verb} ویلا در رشت`, { city: rasht.id, type: "villa" });
   if (kish) {
-    add("اجاره سوئیت مبله در کیش", {
+    add(`${verb} سوئیت مبله در کیش`, {
       city: kish.id,
       type: "apartment",
       features: ["furnished"],
     });
   }
-  if (karaj) add("اجاره آپارتمان در کرج", { city: karaj.id, type: "apartment" });
+  if (karaj) add(`${verb} آپارتمان در کرج`, { city: karaj.id, type: "apartment" });
 
   add("خانه‌های زیر ۱۰۰ متر", { area: "50-100" });
-  add("اجاره با پارکینگ", { features: ["parking"] });
+  add(`${verb} با پارکینگ`, { features: ["parking"] });
 
   return links.slice(0, 12);
 }
 
-export default function RelatedLinks({ filters, selectedCity }) {
-  const links = buildLinks(filters, selectedCity);
+export default function RelatedLinks({ filters, selectedCity, listingType = "rent" }) {
+  const links = buildLinks(filters, selectedCity, listingType);
 
   return (
     <section className="mt-6 rounded-2xl border border-gray-4 bg-white p-4 sm:p-5">

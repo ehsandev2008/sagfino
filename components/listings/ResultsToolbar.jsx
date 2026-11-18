@@ -18,6 +18,7 @@ export default function ResultsToolbar({
   page,
   totalPages,
   locationLabel,
+  listingType = "rent",
 }) {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
@@ -67,7 +68,9 @@ export default function ResultsToolbar({
       )}
 
       <div className="min-w-0">
-        <h2 className="text-h5 text-gray-13">املاک اجاره‌ای</h2>
+        <h2 className="text-h5 text-gray-13">
+  {listingType === "buy" ? "املاک فروشی" : "املاک اجاره‌ای"}
+</h2>
         <p className="mt-1 flex flex-wrap items-center gap-x-2 gap-y-0.5 text-caption-md">
           <span
             className={`font-semibold ${

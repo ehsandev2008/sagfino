@@ -11,6 +11,7 @@ import { Bookmark, Home2 } from "iconsax-react";
  */
 export default function ListingCard({ property, priority = false, large = false }) {
   const [saved, setSaved] = useState(false);
+  const isBuy = property.dealType === "buy" || property.dealType === "sale";
   const deposit =
     property.depositLabel === "توافقی"
       ? "رهن توافقی"
@@ -19,6 +20,10 @@ export default function ListingCard({ property, priority = false, large = false 
     property.rentLabel === "توافقی"
       ? "اجاره توافقی"
       : `${property.rentLabel} اجاره`;
+  const price =
+    property.priceLabel === "توافقی"
+      ? "قیمت توافقی"
+      : `${property.priceLabel ?? property.price} تومان`;
 
   return (
     <article className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-gray-4 bg-white transition-all duration-300 hover:border-gray-6 hover:shadow-md">
@@ -94,21 +99,33 @@ export default function ListingCard({ property, priority = false, large = false 
             {property.address}
           </p>
 
-          <p
-            className={`font-bold text-gray-11 ${
-              large ? "text-base" : "text-body-xxs lg:text-body-xs"
-            }`}
-          >
-            {deposit}
-          </p>
+          {isBuy ? (
+            <p
+              className={`font-bold text-gray-11 ${
+                large ? "text-base" : "text-body-xxs lg:text-body-xs"
+              }`}
+            >
+              {price}
+            </p>
+          ) : (
+            <>
+              <p
+                className={`font-bold text-gray-11 ${
+                  large ? "text-base" : "text-body-xxs lg:text-body-xs"
+                }`}
+              >
+                {deposit}
+              </p>
 
-          <p
-            className={`font-bold text-gray-11 ${
-              large ? "text-base" : "text-body-xxs lg:text-body-xs"
-            }`}
-          >
-            {rent}
-          </p>
+              <p
+                className={`font-bold text-gray-11 ${
+                  large ? "text-base" : "text-body-xxs lg:text-body-xs"
+                }`}
+              >
+                {rent}
+              </p>
+            </>
+          )}
         </div>
       </div>
     </article>
