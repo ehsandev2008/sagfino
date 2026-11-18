@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
 import { AnimatePresence, motion } from "motion/react";
 import Image from "next/image";
 import StepProgress from "./StepProgress";
@@ -10,8 +11,10 @@ import Step3Details from "./Step3Details";
 import Step4Price from "./Step4Price";
 import Step5Description from "./Step5Description";
 import Step6Media from "./Step6Media";
-import ListingSuccess from "./ListingSuccess";
 import ListingError from "./ListingError";
+import { useAuth } from "../../context/AuthContext";
+import { toast } from "../ui/toast";
+import { buildDraftListing } from "../../lib/listings/draft-listing";
 
 const TOTAL_STEPS = 6;
 const DESCRIPTION_LINES = Array.from({ length: 10 }, () => "");
@@ -34,6 +37,12 @@ function validateStep(step, data) {
 
   switch (step) {
     case 0:
+      if (!data.provinceId) {
+        errors.provinceId = "استان الزامی است";
+      }
+      if (!data.cityId) {
+        errors.cityId = "شهر الزامی است";
+      }
       if (!data.mainStreet?.trim()) {
         errors.mainStreet = "خیابان اصلی الزامی است";
       }
@@ -97,6 +106,8 @@ function SidePhoto() {
  * توضیحات و در پایان تصاویر/ویدئو.
  */
 export default function ListingWizard() {
+  const router = useRouter();
+  const { user } = useAuth();
   const [currentStep, setCurrentStep] = useState(0);
   const [formData, setFormData] = useState({
     descriptionLines: DESCRIPTION_LINES,
@@ -105,7 +116,7 @@ export default function ListingWizard() {
   });
   const [errors, setErrors] = useState({});
   const [direction, setDirection] = useState(1);
-  const [status, setStatus] = useState("form"); // form | submitting | success | error
+  const [status, setStatus] = useState("form"); // form | submitting | error
 
   // نگه‌داشتن آخرین فایل‌ها برای آزادسازی Object URL هنگام خروج
   const mediaRef = useRef({ images: [], video: null });
@@ -140,16 +151,36 @@ export default function ListingWizard() {
     if (status === "submitting") return;
     setStatus("submitting");
 
-    // شبیه‌سازی ارتباط با سرور؛ در نسخهٔ نهایی به API ثبت آگهی وصل می‌شود.
-    await new Promise((resolve) => setTimeout(resolve, 1200));
+    try {
+      const draft = buildDraftListing(formData, {
+        userPhone: user?.phone,
+      });
+      const payload = new FormData();
+      payload.append("listing", JSON.stringify(draft));
+      (formData.images ?? []).forEach((image) => {
+        if (image?.file) payload.append("images", image.file, image.name);
+      });
+      if (formData.video?.file) {
+        payload.append("video", formData.video.file, formData.video.name);
+      }
 
-    if (!formData.images?.length) {
+      const response = await fetch("/api/properties", {
+        method: "POST",
+        body: payload,
+      });
+      const result = await response.json();
+      if (!response.ok) {
+        throw new Error(result.error || "ثبت آگهی انجام نشد");
+      }
+
+      toast.success("آگهی شما با موفقیت ثبت شد.");
+      router.push(`/properties/${encodeURIComponent(result.code)}`);
+    } catch (error) {
+      console.error("[new-ad] saving listing draft failed:", error);
+      toast.error(error.message || "ذخیرهٔ آگهی انجام نشد.");
       setStatus("error");
-      return;
     }
-
-    setStatus("success");
-  }, [formData.images, status]);
+  }, [formData, router, status, user]);
 
   const goNext = () => {
     if (status === "submitting") return;
@@ -228,15 +259,11 @@ export default function ListingWizard() {
     }
   };
 
-  if (status === "success" || status === "error") {
+  if (status === "error") {
     return (
       <div className="flex min-h-dvh flex-col bg-white lg:h-dvh lg:flex-row lg:overflow-hidden">
         <div className="flex min-h-dvh flex-1 flex-col lg:h-dvh lg:overflow-y-auto">
-          {status === "success" ? (
-            <ListingSuccess />
-          ) : (
-            <ListingError onBack={handleBackToForm} />
-          )}
+          <ListingError onBack={handleBackToForm} />
         </div>
         <SidePhoto />
       </div>

@@ -15,9 +15,11 @@ import {
   Ruler,
   Sun1,
   TickCircle,
+  Video,
   Wind2,
 } from "iconsax-react";
 import MapPanel from "@/components/listings/map/MapPanel";
+import { DEAL_TYPE_LABELS } from "@/lib/listings/constants";
 import {
   formatDateFa,
   formatPrice,
@@ -66,11 +68,18 @@ export default function PropertyDetails({
   const totalFloors = Number(property.totalFloors) || 1;
   const floor = Number(property.floor) || 0;
   const floorLabel =
-    totalFloors > 1
+    property.floorLabel ??
+    (totalFloors > 1
       ? `${floor === 0 ? "همکف" : toFaDigits(floor)} از ${toFaDigits(
           totalFloors
         )}`
-      : "همکف";
+      : "همکف");
+
+  const dealType = property.dealType ?? "rent";
+  const dealTypeLabel =
+    property.dealTypeLabel ??
+    DEAL_TYPE_LABELS[dealType] ??
+    "رهن و اجاره";
 
   const currentYear = getCurrentPersianYear();
   const age =
@@ -92,13 +101,15 @@ export default function PropertyDetails({
     {
       icon: Ruler,
       label: "متراژ",
-      value: `${toFaDigits(property.area)} متر`,
+      value: property.area ? `${toFaDigits(property.area)} متر` : "—",
     },
     {
       icon: Home2,
       label: "اتاق",
       value:
-        property.rooms > 0 ? `${toFaDigits(property.rooms)} خواب` : "بدون اتاق",
+        Number(property.rooms) > 0
+          ? `${toFaDigits(property.rooms)} خواب`
+          : "بدون اتاق",
     },
     {
       icon: Layer,
@@ -107,16 +118,54 @@ export default function PropertyDetails({
     },
   ];
 
-  const priceRows = [
-    {
-      label: "ودیعه",
-      value: property.depositLabel ?? formatPrice(property.deposit),
-    },
-    {
-      label: "اجاره ماهیانه",
-      value: property.rentLabel ?? formatPrice(property.rent),
-    },
-  ];
+  const priceRows = (() => {
+    if (dealType === "buy" || dealType === "sale") {
+      const rows = [
+        {
+          label: "قیمت کل",
+          value: property.priceLabel ?? formatPrice(property.price),
+        },
+      ];
+
+      if (Number(property.pricePerMeter) > 0) {
+        rows.push({
+          label: "قیمت هر متر",
+          value: formatPrice(property.pricePerMeter),
+        });
+      }
+
+      if (Number(property.loanAmount) > 0) {
+        rows.push({
+          label: "وام قابل انتقال",
+          value: formatPrice(property.loanAmount),
+        });
+      }
+
+      return rows;
+    }
+
+    if (dealType === "daily-rent") {
+      return [
+        {
+          label: "اجاره روزانه",
+          value:
+            property.priceLabel ??
+            formatPrice(property.price ?? property.rent),
+        },
+      ];
+    }
+
+    return [
+      {
+        label: "ودیعه",
+        value: property.depositLabel ?? formatPrice(property.deposit),
+      },
+      {
+        label: "اجاره ماهیانه",
+        value: property.rentLabel ?? formatPrice(property.rent),
+      },
+    ];
+  })();
 
   const amenities = [
     { icon: Car, label: "پارکینگ", value: countLabel(property.parkingCount) },
@@ -161,6 +210,15 @@ export default function PropertyDetails({
       value: property.buildingOrientation ?? "—",
     },
     { icon: Judge, label: "نوع سند", value: property.deedType ?? "—" },
+    ...(property.unitCount
+      ? [
+          {
+            icon: Building,
+            label: "تعداد واحد",
+            value: toFaDigits(property.unitCount),
+          },
+        ]
+      : []),
     {
       icon: Game,
       label: "امکانات تفریحی",
@@ -192,18 +250,18 @@ export default function PropertyDetails({
         <div className="flex items-start justify-between gap-3">
           <div className="min-w-0">
             <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-base text-gray-9">
-              <span>رهن و اجاره</span>
+              <span>{dealTypeLabel}</span>
               <span className="h-1 w-1 rounded-full bg-gray-5" />
-              <span>{property.propertyTypeLabel}</span>
+              <span>{property.propertyTypeLabel ?? "—"}</span>
               <span className="h-1 w-1 rounded-full bg-gray-5" />
-              <span>{property.cityName}</span>
+              <span>{property.cityName ?? "—"}</span>
             </div>
 
             <h1
               id="property-details-title"
               className="mt-2 text-lg font-bold leading-8 text-gray-13 sm:text-xl"
             >
-              {property.title}
+              {property.title ?? "آگهی بدون عنوان"}
             </h1>
 
             <div className="mt-2 flex flex-wrap items-center gap-1.5">
@@ -220,7 +278,7 @@ export default function PropertyDetails({
               )}
               <span className="flex items-center gap-1.5 rounded-md bg-gray-1 px-2.5 py-1 text-base text-gray-9">
                 <Location size="16" color="currentColor" />
-                {property.neighborhood}
+                {property.neighborhood ?? "—"}
               </span>
             </div>
           </div>
@@ -304,7 +362,7 @@ export default function PropertyDetails({
       <div className="px-4 sm:px-5">
         <SectionTitle icon={NoteText} title="توضیحات" />
         <p className="mt-2 whitespace-pre-line text-base leading-8 text-gray-10">
-          {property.description}
+          {property.description || "توضیحاتی برای این آگهی ثبت نشده است."}
         </p>
 
         <dl className="mt-3 space-y-1.5">
@@ -327,6 +385,21 @@ export default function PropertyDetails({
         </dl>
       </div>
 
+      {property.videoUrl && (
+        <>
+          <SectionDivider />
+          <div className="px-4 sm:px-5">
+            <SectionTitle icon={Video} title="ویدئو ملک" />
+            <video
+              controls
+              preload="metadata"
+              src={property.videoUrl}
+              className="mt-3 w-full rounded-xl border border-gray-3 bg-black"
+            />
+          </div>
+        </>
+      )}
+
       <SectionDivider />
 
       {/* موقعیت */}
@@ -340,7 +413,7 @@ export default function PropertyDetails({
               color="currentColor"
               className="shrink-0 text-primary"
             />
-            {property.address}
+            {property.address ?? "—"}
           </span>
         </div>
 

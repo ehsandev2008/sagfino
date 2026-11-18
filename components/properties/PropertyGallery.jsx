@@ -12,8 +12,6 @@ import {
 } from "iconsax-react";
 import { toFaDigits } from "@/lib/auth";
 
-const FALLBACK_IMAGE =
-  "/imags/rent images/pexels-vecislavas-popa-1571468 1.webp";
 const EASE = [0.22, 1, 0.36, 1];
 
 const slideVariants = {
@@ -36,10 +34,17 @@ const lightboxVariants = {
   exit: (direction) => ({ opacity: 0, x: direction > 0 ? 72 : -72 }),
 };
 
-/** فقط تصاویر یکتا را نگه می‌دارد و در نبود تصویر، یک تصویر پیش‌فرض برمی‌گرداند. */
+/** فقط تصاویر یکتا را نگه می‌دارد؛ آگهی بدون تصویر، تصویر جایگزین ندارد. */
 function resolvePhotos(images) {
-  const unique = [...new Set((images ?? []).filter(Boolean))];
-  return unique.length > 0 ? unique : [FALLBACK_IMAGE];
+  return [...new Set((images ?? []).filter(Boolean))];
+}
+
+/** تصاویر ذخیره‌شده در مرورگر (blob/data) نباید از بهینه‌ساز Next عبور کنند. */
+function isTemporarySource(src) {
+  return (
+    typeof src === "string" &&
+    (src.startsWith("blob:") || src.startsWith("data:"))
+  );
 }
 
 /**
@@ -144,6 +149,20 @@ export default function PropertyGallery({ images = [], title }) {
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [isLightboxOpen, lightboxIndex, count]);
+
+  if (count === 0) {
+    return (
+      <section
+        aria-label="گالری تصاویر آگهی"
+        className="grid aspect-[4/3] w-full place-items-center overflow-hidden rounded-2xl border border-gray-3 bg-gray-1 text-center md:aspect-auto md:h-[clamp(340px,36vw,500px)]"
+      >
+        <div className="flex flex-col items-center gap-3 px-5 text-gray-8">
+          <Gallery size="44" color="currentColor" variant="Linear" />
+          <p className="text-base">تصویری برای این آگهی ثبت نشده است</p>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section aria-label="گالری تصاویر آگهی">
@@ -276,6 +295,7 @@ export default function PropertyGallery({ images = [], title }) {
                   priority
                   sizes="100vw"
                   draggable={false}
+                  unoptimized={isTemporarySource(photos[mobileIndex])}
                   className="object-cover"
                 />
               </motion.div>
@@ -396,6 +416,7 @@ export default function PropertyGallery({ images = [], title }) {
                     fill
                     sizes="100vw"
                     draggable={false}
+                    unoptimized={isTemporarySource(photos[lightboxIndex])}
                     className="object-contain"
                   />
                 </motion.div>
@@ -443,6 +464,7 @@ export default function PropertyGallery({ images = [], title }) {
                       alt=""
                       fill
                       sizes="80px"
+                      unoptimized={isTemporarySource(photo)}
                       className="object-cover"
                     />
                   </button>
@@ -495,6 +517,7 @@ function GalleryTile({
             priority={priority}
             sizes={sizes}
             draggable={false}
+            unoptimized={isTemporarySource(photo)}
             className="object-cover transition-transform duration-700 group-hover:scale-[1.04]"
           />
         </motion.div>

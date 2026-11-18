@@ -6,6 +6,7 @@ import { ArrowLeft2 } from "iconsax-react";
 import PropertyGallery from "@/components/properties/PropertyGallery";
 import PropertyDetails from "@/components/properties/PropertyDetails";
 import PropertyContact from "@/components/properties/PropertyContact";
+import DraftPropertyPage from "@/components/properties/DraftPropertyPage";
 import ListingCard from "@/components/listings/ListingCard";
 import { getListingByCode, getRentListings } from "@/lib/listings/service";
 import { parseListingSearchParams } from "@/lib/listings/query";
@@ -31,9 +32,17 @@ async function PropertyContent({ params }) {
   await connection();
 
   const { id } = await params;
-  const property = await getListingByCode(decodeURIComponent(id));
+  const code = decodeURIComponent(id);
 
-  if (!property) notFound();
+  const property = await getListingByCode(code);
+
+  if (!property) {
+    // پشتیبانی از آگهی‌های قدیمی که پیش از اتصال ثبت در IndexedDB ذخیره شده‌اند.
+    if (code.startsWith("AD-")) {
+      return <DraftPropertyPage code={code} />;
+    }
+    notFound();
+  }
 
   const similarFilters = parseListingSearchParams({
     city: property.cityId ? String(property.cityId) : "",

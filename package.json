@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "seed:listings": "node scripts/seed-listings.mjs"
+    "seed:listings": "node scripts/seed-listings.mjs",
+    "seed:real-estate": "node scripts/seed-real-estate.mjs"
   },
   "dependencies": {
     "@gsap/react": "^2.1.2",
@@ -25,6 +26,7 @@
     "@tailwindcss/turbopack": "^4",
     "eslint": "^9",
     "eslint-config-next": "16.4.1",
+    "sharp": "^0.35.5",
     "tailwindcss": "^4"
   }
 }

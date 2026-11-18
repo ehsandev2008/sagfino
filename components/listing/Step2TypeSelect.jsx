@@ -1,6 +1,7 @@
 "use client";
 
 import CustomDropdown from "./CustomDropdown";
+import { PROPERTY_TYPE_OPTIONS } from "@/lib/listings/constants";
 
 const TRANSACTION_TYPES = [
   { value: "sale", label: "فروش" },
@@ -9,15 +10,9 @@ const TRANSACTION_TYPES = [
   { value: "daily-rent", label: "اجاره روزانه" },
 ];
 
-const PROPERTY_TYPES = [
-  { value: "apartment", label: "آپارتمان" },
-  { value: "villa", label: "ویلایی" },
-  { value: "land", label: "زمین و کلنگی" },
-  { value: "commercial", label: "تجاری و اداری" },
-  { value: "suite", label: "سوئیت" },
-  { value: "penthouse", label: "پنت‌هاوس" },
-  { value: "garden", label: "باغ و باغچه" },
-];
+const PROPERTY_TYPES = PROPERTY_TYPE_OPTIONS.filter(
+  (option) => option.value
+);
 
 /**
  * مرحله ۲: انتخاب نوع معامله و نوع ملک

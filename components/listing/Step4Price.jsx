@@ -1,16 +1,6 @@
 "use client";
 
-import CustomDropdown from "./CustomDropdown";
 import FormInput from "./FormInput";
-
-const PRICE_RANGE_OPTIONS = [
-  { value: "under-500", label: "زیر ۵۰۰ میلیون" },
-  { value: "500-1000", label: "۵۰۰ میلیون تا ۱ میلیارد" },
-  { value: "1000-2000", label: "۱ تا ۲ میلیارد" },
-  { value: "2000-5000", label: "۲ تا ۵ میلیارد" },
-  { value: "5000-10000", label: "۵ تا ۱۰ میلیارد" },
-  { value: "above-10000", label: "بالای ۱۰ میلیارد" },
-];
 
 /** فرمت‌کننده عدد با جداکننده هزارگان */
 function formatPrice(value) {
@@ -21,12 +11,15 @@ function formatPrice(value) {
 
 /**
  * مرحله ۴: اطلاعات قیمتی ملک
+ * فروش: قیمت کل، قیمت هر متر و وام قابل انتقال
+ * اجاره/رهن: ودیعه و اجاره ماهانه
+ * اجاره روزانه: اجاره روزانه
  */
 export default function Step4Price({ data, onChange, errors }) {
-  const isSale =
-    data.transactionType === "sale" || !data.transactionType;
-  const isRent =
-    data.transactionType === "rent" || data.transactionType === "mortgage";
+  const transactionType = data.transactionType || "rent";
+  const isSale = transactionType === "sale";
+  const isDailyRent = transactionType === "daily-rent";
+  const isRent = transactionType === "rent" || transactionType === "mortgage";
 
   return (
     <div className="flex flex-col">
@@ -65,32 +58,25 @@ export default function Step4Price({ data, onChange, errors }) {
             />
           </>
         ) : (
-          <>
-            <FormInput
-              size="lg"
-              label={isSale ? "قیمت کل" : "اجاره روزانه"}
-              placeholder={
-                isSale ? "قیمت کل (تومان)" : "اجاره روزانه (تومان)"
-              }
-              type="text"
-              inputMode="numeric"
-              value={formatPrice(data.price || "")}
-              onChange={(e) =>
-                onChange({ price: e.target.value.replace(/\D/g, "") })
-              }
-              suffix="تومان"
-              error={errors?.price}
-            />
-            <CustomDropdown
-              size="lg"
-              label="محدوده قیمت"
-              placeholder="محدوده قیمت"
-              options={PRICE_RANGE_OPTIONS}
-              value={data.priceRange}
-              onChange={(v) => onChange({ priceRange: v })}
-              error={errors?.priceRange}
-            />
-          </>
+          <FormInput
+            size="lg"
+            label={isSale ? "قیمت کل" : isDailyRent ? "اجاره روزانه" : "قیمت"}
+            placeholder={
+              isSale
+                ? "قیمت کل (تومان)"
+                : isDailyRent
+                  ? "اجاره روزانه (تومان)"
+                  : "قیمت (تومان)"
+            }
+            type="text"
+            inputMode="numeric"
+            value={formatPrice(data.price || "")}
+            onChange={(e) =>
+              onChange({ price: e.target.value.replace(/\D/g, "") })
+            }
+            suffix="تومان"
+            error={errors?.price}
+          />
         )}
       </div>
 

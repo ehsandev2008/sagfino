@@ -1,6 +1,5 @@
 "use client";
 import { useRef } from "react";
-import Image from "next/image";
 import { motion, useInView } from "motion/react";
 
 const RIGHT_PARAGRAPHS = [
@@ -56,7 +55,8 @@ export default function StorySection() {
       dir="rtl"
       className="bg-white px-4 sm:px-8 lg:px-16 xl:px-24 py-10 lg:py-16"
     >
-      <div className="max-w-6xl mx-auto">
+      {/* باکس اصلی با بوردر */}
+      <div className="max-w-6xl mx-auto border border-gray-4 rounded-2xl p-6 sm:p-8 lg:p-12">
 
         {/* برچسب */}
         <FadeUp delay={0} className="mb-6">
@@ -82,19 +82,19 @@ export default function StorySection() {
           </p>
         </FadeUp>
 
-        {/* بدنه */}
+        {/* بدنه: تصویر + متن */}
         <div className="flex flex-col lg:flex-row gap-8 lg:gap-12 items-start">
 
-          {/* تصویر */}
+          {/* تصویر — با img معمولی تا مشکل path با فاصله نداشته باشیم */}
           <FadeIn x={40} delay={0.2} className="w-full lg:w-[36%] shrink-0">
-            <div className="relative w-full aspect-[3/4] rounded-2xl overflow-hidden shadow-lg">
-              <Image
-                src="/sagfino story/story.png"
+            <div className="relative w-full overflow-hidden rounded-xl shadow-md">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/story%20sagfino/story.webp"
                 alt="ساختمان سقفینو"
-                fill
-                className="object-cover"
-                sizes="(max-width: 1024px) 100vw, 36vw"
-                priority
+                className="w-full h-auto object-cover"
+                style={{ aspectRatio: "3/4" }}
               />
             </div>
           </FadeIn>

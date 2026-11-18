@@ -51,13 +51,13 @@ const SERVICE_LINKS = [
 ];
 
 const INFO_LINKS = [
-  "دانلود اپلیکیشن سقفینو",
-  "تماس با ما",
-  "داستان سقفینو",
-  "پرسش‌های پرتکرار",
-  "یک سقف؛ بلاگ سقفینو",
-  "حریم شخصی شما",
-  "تعهدات ما و شما",
+  { label: "دانلود اپلیکیشن سقفینو", href: "#" },
+  { label: "تماس با ما", href: "/contact" },
+  { label: "داستان سقفینو", href: "/about" },
+  { label: "پرسش‌های پرتکرار", href: "#" },
+  { label: "یک سقف؛ بلاگ سقفینو", href: "#" },
+  { label: "حریم شخصی شما", href: "#" },
+  { label: "تعهدات ما و شما", href: "#" },
 ];
 
 const ACCOUNT_LINKS = ["پروفایل من", "ملک‌های نشان‌شده", "آگهی‌های من"];
@@ -150,13 +150,13 @@ export default function Footer() {
               اطلاعات
             </h3>
             <ul className="mt-4 flex flex-col gap-3">
-              {INFO_LINKS.map((link) => (
-                <li key={link}>
+              {INFO_LINKS.map((item) => (
+                <li key={item.label}>
                   <Link
-                    href="#"
+                    href={item.href}
                     className="nav-link text-body-xxs text-gray-9 transition-colors hover:text-primary"
                   >
-                    {link}
+                    {item.label}
                   </Link>
                 </li>
               ))}

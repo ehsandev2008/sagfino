@@ -4,41 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { ArrowLeft2 } from "iconsax-react";
 import Reveal from "../../ui/Reveal";
 import AdvisorCard from "./AdvisorCard";
-
-const ADVISORS = [
-  {
-    id: 1,
-    name: "علی پرتو",
-    office: "املاک توسی",
-    rating: "۵",
-    image: "/imags/realstate/agent-4.webp",
-    href: "/advisors/ali-parto",
-  },
-  {
-    id: 2,
-    name: "زیبا تاجدار",
-    office: "املاک فرشته",
-    rating: "۴",
-    image: "/imags/realstate/agent-3.webp",
-    href: "/advisors/ziba-tajdar",
-  },
-  {
-    id: 3,
-    name: "رز دانش",
-    office: "املاک سبز",
-    rating: "۴/۸",
-    image: "/imags/realstate/agent-2.webp",
-    href: "/advisors/roz-danesh",
-  },
-  {
-    id: 4,
-    name: "ماندانا تبریزی",
-    office: "املاک ولیعصر",
-    rating: "۴",
-    image: "/imags/realstate/agent-1.webp",
-    href: "/advisors/mandana-tabrizi",
-  },
-];
+import ADVISORS from "./advisors";
 
 /**
  * سکشن «مشاورین برتر تهران»

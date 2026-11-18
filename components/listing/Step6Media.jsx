@@ -42,6 +42,8 @@ export default function Step6Media({ data, onChange }) {
     const next = accepted.slice(0, remaining).map((file) => ({
       id: `${Date.now()}-${Math.random().toString(36).slice(2)}`,
       name: file.name,
+      type: file.type,
+      file,
       url: URL.createObjectURL(file),
     }));
 
@@ -69,6 +71,8 @@ export default function Step6Media({ data, onChange }) {
       video: {
         id: `${Date.now()}-${Math.random().toString(36).slice(2)}`,
         name: file.name,
+        type: file.type,
+        file,
         url: URL.createObjectURL(file),
       },
     });

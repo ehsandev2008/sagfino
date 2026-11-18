@@ -43,7 +43,11 @@ const IRAN_MASK = {
 };
 
 function createPriceIcon(point, large = false) {
-  const label = formatPriceShort(point.rent);
+  const isSale = point.dealType === "buy" || point.dealType === "sale";
+  const isDailyRent = point.dealType === "daily-rent";
+  const label = formatPriceShort(
+    isSale || isDailyRent ? point.price : point.rent
+  );
   return L.divIcon({
     className: "saghfino-map-pin",
     html: `<div class="saghfino-pin ${
@@ -230,13 +234,21 @@ export default function LeafletMap({
                   <span
                     className={`text-gray-9 ${largePins ? "text-base" : "text-[10px]"}`}
                   >
-                    اجاره
+                    {point.dealType === "buy" || point.dealType === "sale"
+                      ? "قیمت"
+                      : point.dealType === "daily-rent"
+                        ? "اجاره روزانه"
+                        : "اجاره"}
                     <span
                       className={`mr-1 block font-bold text-primary ${
                         largePins ? "text-base" : "text-[11px]"
                       }`}
                     >
-                      {point.rentLabel}
+                      {point.dealType === "buy" || point.dealType === "sale"
+                        ? (point.priceLabel ?? formatPriceShort(point.price))
+                        : point.dealType === "daily-rent"
+                          ? (point.priceLabel ?? formatPriceShort(point.price))
+                          : point.rentLabel}
                     </span>
                   </span>
                   <span
